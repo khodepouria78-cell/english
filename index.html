@@ -324,7 +324,7 @@
     <div class="auto-sent-box">
       <div class="icon">☁️</div>
       <p class="title">نتیجه‌ات به معلم ارسال شد!</p>
-      <p class="sub">نمره‌ات خودکار در پنل معلم ذخیره شد — نیازی به کپی کردن کد نیست.</p>
+      <p class="sub">نمره‌ات خودکار در پنل معلم ذخیره شد.</p>
     </div>
     <div class="glass score-card">
       <div class="score-num" id="scoreNum"></div>
@@ -445,10 +445,7 @@
       </div>
     </div>
     <div class="atab-section hidden" data-atab="submissions">
-      <div class="glass panel">
-        <h3>تکالیف ارسالی (<span id="asCount">۰</span>)</h3>
-        <div id="submissionsList"></div>
-      </div>
+      <div class="glass panel"><h3>تکالیف ارسالی (<span id="asCount">۰</span>)</h3><div id="submissionsList"></div></div>
     </div>
     <div class="atab-section hidden" data-atab="settings">
       <div class="glass panel">
@@ -471,9 +468,7 @@
         <button class="btn sm ghost" id="resetVersionBtn">شروع نسخه جدید</button>
         <p class="ok-msg hidden" id="resetVersionMsg">انجام شد ✓</p>
       </div>
-      <div class="start-card">
-        <button class="btn ghost" id="logoutBtn">خروج</button>
-      </div>
+      <div class="start-card"><button class="btn ghost" id="logoutBtn">خروج</button></div>
     </div>
   </section>
 </main>
@@ -481,19 +476,17 @@
 <footer>Lingoo — تمام تنظیمات در ابر ذخیره می‌شود</footer>
 
 <script>// Firebase
-const firebaseConfig = {
+firebase.initializeApp({
   apiKey: "AIzaSyBWAOBQRMTvP8Cs1NMGIF4nGrdl-s621Gw",
   authDomain: "english-ace37.firebaseapp.com",
   projectId: "english-ace37",
   storageBucket: "english-ace37.firebasestorage.app",
   messagingSenderId: "115731389262",
   appId: "1:115731389262:web:ddf106da4ccba093325c1f"
-};
-firebase.initializeApp(firebaseConfig);
+});
 const db = firebase.firestore();
 
-const HISTORY_KEY = 'eng_student_history_v1';
-const LOCK_KEY = 'eng_exam_lock_v1';
+const HISTORY_KEY = 'eng_student_history_v1', LOCK_KEY = 'eng_exam_lock_v1';
 
 let DATA = {
   assignment: { title: 'واحد ۳', description: 'تمرین صفحه ۴۲ تا ۴۵', due: 'پنجشنبه' },
@@ -504,47 +497,35 @@ let DATA = {
   ],
   settings: { adminPass: 'Pouria138534', examTimeLimitMin: 0, assignmentDeadline: '', examVersion: 1 }
 };
-let allDataLoaded = true;
-let userAnswers = {};
-let editingQuestionId = null;
-let examTimerHandle = null;
-let examTimeLeftSec = 0;
+let allDataLoaded = false;
+let userAnswers = {}, editingQuestionId = null, examTimerHandle = null, examTimeLeftSec = 0;
 
 async function loadCloudConfig() {
   try {
     const doc = await db.collection("config").doc("main").get();
     if (doc.exists) {
-      const cloud = doc.data();
-      if (cloud.assignment) DATA.assignment = cloud.assignment;
-      if (cloud.questions && Array.isArray(cloud.questions) && cloud.questions.length > 0) DATA.questions = cloud.questions;
-      if (cloud.settings) DATA.settings = {...DATA.settings, ...cloud.settings};
-    } else {
-      await saveCloudConfig();
-    }
+      const c = doc.data();
+      if (c.assignment) DATA.assignment = c.assignment;
+      if (c.questions && Array.isArray(c.questions) && c.questions.length > 0) DATA.questions = c.questions;
+      if (c.settings) DATA.settings = {...DATA.settings, ...c.settings};
+    } else { await saveCloudConfig(); }
     document.getElementById('syncStatus')?.classList.replace('load','ok');
     document.getElementById('syncStatus')?.innerHTML = '☁️ متصل به دیتابیس ابری';
-    renderHome();
-    renderTagList();
-    renderQList();
+    allDataLoaded = true;
+    renderHome(); renderTagList(); renderQList();
   } catch(e) {
     console.error(e);
-    document.getElementById('syncStatus')?.innerHTML = '⚠️ خطا در اتصال';
+    document.getElementById('syncStatus')?.innerHTML = '⚠️ خطا — داده‌های پیش‌فرض';
+    allDataLoaded = true;
     renderHome();
   }
 }
-
 async function saveCloudConfig() {
-  try {
-    await db.collection("config").doc("main").set({
-      assignment: DATA.assignment,
-      questions: DATA.questions,
-      settings: DATA.settings
-    }, { merge: true });
-    return true;
-  } catch(e) { console.error(e); return false; }
+  try { await db.collection("config").doc("main").set({assignment:DATA.assignment,questions:DATA.questions,settings:DATA.settings},{merge:true}); return true; }
+  catch(e) { console.error(e); return false; }
 }
 
-function loadHistory(){ try{ return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; }catch(e){ return []; } }
+function loadHistory(){ try{ return JSON.parse(localStorage.getItem(HISTORY_KEY))||[]; }catch(e){ return []; } }
 function saveHistory(h){ localStorage.setItem(HISTORY_KEY, JSON.stringify(h)); }
 function loadLock(){ try{ return JSON.parse(localStorage.getItem(LOCK_KEY)); }catch(e){ return null; } }
 function saveLock(l){ localStorage.setItem(LOCK_KEY, JSON.stringify(l)); }
@@ -552,21 +533,14 @@ function saveLock(l){ localStorage.setItem(LOCK_KEY, JSON.stringify(l)); }
 function showView(name){
   if(name !== 'quiz') stopExamTimer();
   document.querySelectorAll('.view-section').forEach(s=> s.classList.toggle('hidden', s.dataset.view !== name));
-  document.querySelectorAll('.nav-btn').forEach(b=> b.classList.toggle('active', b.dataset.go === (name==='adminGate' ? 'admin' : name)));
+  document.querySelectorAll('.nav-btn').forEach(b=> b.classList.toggle('active', b.dataset.go === (name==='adminGate'?'admin':name)));
   if(name==='home') renderHome();
   if(name==='quiz') renderQuiz();
   if(name==='upload') renderUpload();
   if(name==='myprogress') renderMyProgress();
   if(name==='admin') renderAdmin();
 }
-document.querySelectorAll('[data-go]').forEach(el=>{
-  el.addEventListener('click', ()=>{
-    const target = el.dataset.go;
-    if(target === 'admin'){
-      showView(sessionStorage.getItem('isAdmin')==='1' ? 'admin' : 'adminGate');
-    } else { showView(target); }
-  });
-});
+document.querySelectorAll('[data-go]').forEach(el=>{ el.addEventListener('click',()=>{ const t=el.dataset.go; showView(t==='admin'?(sessionStorage.getItem('isAdmin')==='1'?'admin':'adminGate'):t); }); });
 
 function renderHome(){
   document.getElementById('homeAssignTitle').textContent = DATA.assignment.title || '—';
@@ -574,146 +548,78 @@ function renderHome(){
   document.getElementById('homeAssignDue').textContent = DATA.assignment.due || '—';
   document.getElementById('quizCountText').textContent = `این آزمون ${toFa(DATA.questions.length)} سوال دارد.`;
 }
-
 function renderQuiz(){
   stopExamTimer();
   const lock = loadLock();
   const locked = lock && lock.version === DATA.settings.examVersion;
   document.getElementById('quizLockedBox').classList.toggle('hidden', !locked);
   document.getElementById('quizOpenBox').classList.toggle('hidden', locked);
-  if(locked){
-    document.getElementById('lockedScoreText').textContent = `نمره تو: ${lock.score} از ${lock.total}`;
-    return;
-  }
+  if(locked){ document.getElementById('lockedScoreText').textContent = `نمره تو: ${lock.score} از ${lock.total}`; return; }
   userAnswers = {};
   document.getElementById('studentNameErr').classList.add('hidden');
   const wrap = document.getElementById('quizList');
-  if(DATA.questions.length === 0){ wrap.innerHTML = '<p style="color:var(--ink-faint);text-align:center;">هنوز سوالی نیست.</p>'; return; }
+  if(DATA.questions.length===0){ wrap.innerHTML='<p style="color:var(--ink-faint);text-align:center;">هنوز سوالی نیست.</p>'; return; }
   wrap.innerHTML = '';
-  DATA.questions.forEach((q, i)=>{
-    const card = document.createElement('div');
-    card.className = 'glass q-card';
-    card.dataset.qid = q.id;
-    let body = q.type === 'mcq' ? `<div class="choices">${q.choices.map(c=>`<button class="choice-btn" data-val="${escapeAttr(c)}">${escapeHtml(c)}</button>`).join('')}</div>` : `<input type="text" class="blank-input" data-qid="${q.id}">`;
+  DATA.questions.forEach((q,i)=>{
+    const card = document.createElement('div'); card.className = 'glass q-card'; card.dataset.qid = q.id;
+    let body = q.type==='mcq'?`<div class="choices">${q.choices.map(c=>`<button class="choice-btn" data-val="${escapeAttr(c)}">${escapeHtml(c)}</button>`).join('')}</div>`:`<input type="text" class="blank-input" data-qid="${q.id}">`;
     card.innerHTML = `<div class="q-meta"><span class="q-num en">Q${i+1}</span><span class="tag-pill">${escapeHtml(q.tag)}</span></div><p class="q-text">${renderQuestionText(q.text)}</p>${body}`;
     wrap.appendChild(card);
-    if(q.type === 'mcq'){
-      card.querySelectorAll('.choice-btn').forEach(btn=>{
-        btn.addEventListener('click', ()=>{
-          card.querySelectorAll('.choice-btn').forEach(b=>b.classList.remove('selected'));
-          btn.classList.add('selected');
-          userAnswers[q.id] = btn.dataset.val;
-        });
-      });
-    } else {
-      card.querySelector('.blank-input').addEventListener('input', e=>{ userAnswers[q.id] = e.target.value; });
-    }
+    if(q.type==='mcq'){ card.querySelectorAll('.choice-btn').forEach(btn=>{ btn.addEventListener('click',()=>{ card.querySelectorAll('.choice-btn').forEach(b=>b.classList.remove('selected')); btn.classList.add('selected'); userAnswers[q.id]=btn.dataset.val; }); }); }
+    else { card.querySelector('.blank-input').addEventListener('input',e=>{ userAnswers[q.id]=e.target.value; }); }
   });
   const badge = document.getElementById('examTimerBadge');
-  if(DATA.settings.examTimeLimitMin > 0){ badge.classList.remove('hidden'); startExamTimer(DATA.settings.examTimeLimitMin * 60); }
+  if(DATA.settings.examTimeLimitMin>0){ badge.classList.remove('hidden'); startExamTimer(DATA.settings.examTimeLimitMin*60); }
   else { badge.classList.add('hidden'); }
 }
-function renderQuestionText(t){ return escapeHtml(t).replace(/(_{3,})/g, '<span class="en">$1</span>'); }
+function renderQuestionText(t){ return escapeHtml(t).replace(/(_{3,})/g,'<span class="en">$1</span>'); }
+function startExamTimer(s){ examTimeLeftSec=s; updateTimerDisplay(); examTimerHandle=setInterval(()=>{ examTimeLeftSec--; updateTimerDisplay(); if(examTimeLeftSec<=0){ stopExamTimer(); submitQuiz(true); } },1000); }
+function stopExamTimer(){ if(examTimerHandle){ clearInterval(examTimerHandle); examTimerHandle=null; } }
+function updateTimerDisplay(){ const m=Math.floor(examTimeLeftSec/60),s=examTimeLeftSec%60; document.getElementById('examTimerText').textContent=`${m}:${s<10?'0':''}${s}`; document.getElementById('examTimerBadge').classList.toggle('low',examTimeLeftSec<=30); }
 
-function startExamTimer(seconds){
-  examTimeLeftSec = seconds; updateTimerDisplay();
-  examTimerHandle = setInterval(()=>{ examTimeLeftSec--; updateTimerDisplay(); if(examTimeLeftSec <= 0){ stopExamTimer(); submitQuiz(true); } }, 1000);
-}
-function stopExamTimer(){ if(examTimerHandle){ clearInterval(examTimerHandle); examTimerHandle = null; } }
-function updateTimerDisplay(){
-  const m = Math.floor(examTimeLeftSec/60), s = examTimeLeftSec%60;
-  document.getElementById('examTimerText').textContent = `${m}:${s<10?'0':''}${s}`;
-  document.getElementById('examTimerBadge').classList.toggle('low', examTimeLeftSec <= 30);
-}
-
-document.getElementById('submitQuizBtn').addEventListener('click', ()=> submitQuiz(false));
-
+document.getElementById('submitQuizBtn').addEventListener('click',()=>submitQuiz(false));
 function submitQuiz(auto){
-  const nameInput = document.getElementById('studentNameInput');
-  const classInput = document.getElementById('studentClassInput');
-  const name = nameInput.value.trim();
-  const className = classInput.value.trim();
-  if(!auto && (!name || !className)){ document.getElementById('studentNameErr').classList.remove('hidden'); return; }
-  if(!auto){ if(!confirm('آیا پاسخ‌هایت را بازبینی کردی؟')) return; }
-  document.getElementById('studentNameErr').classList.add('hidden');
-  stopExamTimer();
-  const results = DATA.questions.map(q=>{
-    const given = (userAnswers[q.id] || '').toString().trim();
-    const isCorrect = given.toLowerCase() === q.answer.toLowerCase();
-    return {id:q.id, tag:q.tag, text:q.text, type:q.type, given, answer:q.answer, isCorrect, explanation:q.explanation||''};
-  });
+  const name=document.getElementById('studentNameInput').value.trim(), cls=document.getElementById('studentClassInput').value.trim();
+  if(!auto&&(!name||!cls)){ document.getElementById('studentNameErr').classList.remove('hidden'); return; }
+  if(!auto&&!confirm('بازبینی کردی؟')) return;
+  document.getElementById('studentNameErr').classList.add('hidden'); stopExamTimer();
+  const results=DATA.questions.map(q=>{ const g=(userAnswers[q.id]||'').trim(); const ok=g.toLowerCase()===q.answer.toLowerCase(); return {id:q.id,tag:q.tag,text:q.text,type:q.type,given:g,answer:q.answer,isCorrect:ok,explanation:q.explanation||''}; });
   document.querySelectorAll('#quizList .choice-btn').forEach(b=>b.disabled=true);
   document.querySelectorAll('#quizList .blank-input').forEach(i=>i.disabled=true);
-  const correctCount = results.filter(r=>r.isCorrect).length;
-  const finalName = name || '(بدون نام)', finalClass = className || '—';
-  saveLock({version: DATA.settings.examVersion, score: correctCount, total: results.length, date: new Date().toLocaleString('fa-IR')});
-  const hist = loadHistory();
-  hist.push({type:'exam', date:new Date().toISOString(), dateLabel:new Date().toLocaleDateString('fa-IR'), score:correctCount, total:results.length});
-  saveHistory(hist);
-  db.collection("results").add({
-    name: finalName, className: finalClass,
-    score: correctCount, total: results.length,
-    date: new Date().toLocaleDateString('fa-IR'),
-    version: DATA.settings.examVersion,
-    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-  }).catch(()=>{});
-  renderResults(results, correctCount);
-  showView('results');
+  const correct=results.filter(r=>r.isCorrect).length;
+  saveLock({version:DATA.settings.examVersion,score:correct,total:results.length,date:new Date().toLocaleString('fa-IR')});
+  const hist=loadHistory(); hist.push({type:'exam',date:new Date().toISOString(),dateLabel:new Date().toLocaleDateString('fa-IR'),score:correct,total:results.length}); saveHistory(hist);
+  db.collection("results").add({name:name||'(بدون نام)',className:cls||'—',score:correct,total:results.length,date:new Date().toLocaleDateString('fa-IR'),version:DATA.settings.examVersion,createdAt:firebase.firestore.FieldValue.serverTimestamp()}).catch(()=>{});
+  renderResults(results,correct); showView('results');
 }
-
-function renderResults(results, correctCountArg){
-  const correctCount = correctCountArg !== undefined ? correctCountArg : results.filter(r=>r.isCorrect).length;
-  document.getElementById('scoreNum').innerHTML = `<span class="en">${correctCount} / ${results.length}</span>`;
-  const tagStats = buildTagStats(results);
-  document.getElementById('insightText').innerHTML = buildInsightText(tagStats, correctCount, results.length);
-  document.getElementById('tagStats').innerHTML = tagStats.map(s=>`<div class="tag-row"><div class="name">${escapeHtml(s.tag)}</div><div class="bar-track"><div class="bar-fill" style="width:${s.pct}%"></div></div><div class="tag-pct en">${s.pct}%</div></div>`).join('');
-  document.getElementById('reviewList').innerHTML = results.map((r,i)=>`<div class="glass review-item"><div class="review-top"><span class="review-mark ${r.isCorrect?'ok':'bad'}">${r.isCorrect?'✓':'✗'}</span><div><p class="review-q">Q${i+1}. ${escapeHtml(r.text).replace(/(_{3,})/g,'<span class="en">$1</span>')}</p><p class="review-a">پاسخ تو: <span class="${r.isCorrect?'right':'wrongtxt'}">${escapeHtml(r.given||'—')}</span>${r.isCorrect?'':` · پاسخ درست: <span class="right">${escapeHtml(r.answer)}</span>`}</p></div></div>${r.explanation?`<div class="explain-box">💡 ${escapeHtml(r.explanation)}</div>`:''}</div>`).join('');
+function renderResults(results,correctCountArg){
+  const correct=correctCountArg!==undefined?correctCountArg:results.filter(r=>r.isCorrect).length;
+  document.getElementById('scoreNum').innerHTML=`<span class="en">${correct} / ${results.length}</span>`;
+  const ts=buildTagStats(results);
+  document.getElementById('insightText').innerHTML=buildInsightText(ts,correct,results.length);
+  document.getElementById('tagStats').innerHTML=ts.map(s=>`<div class="tag-row"><div class="name">${escapeHtml(s.tag)}</div><div class="bar-track"><div class="bar-fill" style="width:${s.pct}%"></div></div><div class="tag-pct en">${s.pct}%</div></div>`).join('');
+  document.getElementById('reviewList').innerHTML=results.map((r,i)=>`<div class="glass review-item"><div class="review-top"><span class="review-mark ${r.isCorrect?'ok':'bad'}">${r.isCorrect?'✓':'✗'}</span><div><p class="review-q">Q${i+1}. ${escapeHtml(r.text).replace(/(_{3,})/g,'<span class="en">$1</span>')}</p><p class="review-a">پاسخ تو: <span class="${r.isCorrect?'right':'wrongtxt'}">${escapeHtml(r.given||'—')}</span>${r.isCorrect?'':` · درست: <span class="right">${escapeHtml(r.answer)}</span>`}</p></div></div>${r.explanation?`<div class="explain-box">💡 ${escapeHtml(r.explanation)}</div>`:''}</div>`).join('');
 }
-function buildTagStats(results){
-  const map = {};
-  results.forEach(r=>{ if(!map[r.tag]) map[r.tag] = {correct:0,total:0}; map[r.tag].total++; if(r.isCorrect) map[r.tag].correct++; });
-  return Object.entries(map).map(([tag,s])=>({tag, correct:s.correct, total:s.total, pct: Math.round((s.correct/s.total)*100)})).sort((a,b)=> b.pct - a.pct);
-}
-function buildInsightText(tagStats, correct, total){
-  if(correct===total) return '<b>عالی!</b> همه سوالات رو درست پاسخ دادی. 🎉';
-  if(tagStats.length<2) return `در این آزمون <b>${correct} از ${total}</b> سوال رو درست پاسخ دادی.`;
-  const s=tagStats[0], w=tagStats[tagStats.length-1];
-  if(s.pct===w.pct) return `عملکردت حدود <b>${s.pct}٪</b> بود.`;
-  return `نقطه قوت: <b>«${escapeHtml(s.tag)}»</b> (${s.pct}٪). نیاز به تمرین: <b>«${escapeHtml(w.tag)}»</b> (${w.pct}٪).`;
-}
+function buildTagStats(results){ const m={}; results.forEach(r=>{ if(!m[r.tag])m[r.tag]={correct:0,total:0}; m[r.tag].total++; if(r.isCorrect)m[r.tag].correct++; }); return Object.entries(m).map(([t,s])=>({tag:t,correct:s.correct,total:s.total,pct:Math.round((s.correct/s.total)*100)})).sort((a,b)=>b.pct-a.pct); }
+function buildInsightText(ts,correct,total){ if(correct===total)return '<b>عالی!</b> 🎉'; if(ts.length<2)return `<b>${correct}/${total}</b>`; const s=ts[0],w=ts[ts.length-1]; if(s.pct===w.pct)return `عملکرد حدود <b>${s.pct}٪</b>`; return `قوت: <b>«${escapeHtml(s.tag)}»</b> (${s.pct}٪). تمرین: <b>«${escapeHtml(w.tag)}»</b> (${w.pct}٪).`; }
 
 function renderUpload(){
-  document.getElementById('uploadCodePanel').classList.add('hidden');
-  document.getElementById('uploadErr').classList.add('hidden');
-  const dl = DATA.settings.assignmentDeadline;
-  if(dl){ const d=new Date(dl); document.getElementById('deadlineInfoText').textContent='مهلت: '+d.toLocaleString('fa-IR'); document.getElementById('deadlineLateTag').classList.toggle('hidden', new Date()<=d); }
+  document.getElementById('uploadCodePanel').classList.add('hidden'); document.getElementById('uploadErr').classList.add('hidden');
+  const dl=DATA.settings.assignmentDeadline; if(dl){ const d=new Date(dl); document.getElementById('deadlineInfoText').textContent='مهلت: '+d.toLocaleString('fa-IR'); document.getElementById('deadlineLateTag').classList.toggle('hidden',new Date()<=d); }
 }
-document.getElementById('uploadSubmitBtn').addEventListener('click', ()=>{
-  const err=document.getElementById('uploadErr'); err.classList.add('hidden');
-  const name=document.getElementById('uploadNameInput').value.trim(), cls=document.getElementById('uploadClassInput').value.trim(), note=document.getElementById('uploadNote').value.trim(), file=document.getElementById('uploadFileInput').files[0];
-  if(!name||!cls||!file){ err.textContent='همه فیلدها را پر کن.'; err.classList.remove('hidden'); return; }
-  if(file.size>1.5*1024*1024){ err.textContent='حجم فایل زیاد است.'; err.classList.remove('hidden'); return; }
+document.getElementById('uploadSubmitBtn').addEventListener('click',()=>{
+  const err=document.getElementById('uploadErr');err.classList.add('hidden');
+  const name=document.getElementById('uploadNameInput').value.trim(),cls=document.getElementById('uploadClassInput').value.trim(),note=document.getElementById('uploadNote').value.trim(),file=document.getElementById('uploadFileInput').files[0];
+  if(!name||!cls||!file){err.textContent='همه فیلدها را پر کن.';err.classList.remove('hidden');return;}
+  if(file.size>1.5*1024*1024){err.textContent='حجم فایل زیاد است.';err.classList.remove('hidden');return;}
   const reader=new FileReader();
-  reader.onload=()=>{
-    const rec={name,className:cls,note,date:new Date().toLocaleDateString('fa-IR'),fileName:file.name,fileType:file.type,fileData:reader.result.split(',')[1],late: DATA.settings.assignmentDeadline?(new Date()>new Date(DATA.settings.assignmentDeadline)):false};
-    document.getElementById('uploadCodeBox').value=btoa(unescape(encodeURIComponent(JSON.stringify(rec))));
-    document.getElementById('uploadCodePanel').classList.remove('hidden');
-    const h=loadHistory(); h.push({type:'assignment',date:new Date().toISOString(),dateLabel:rec.date,fileName:file.name,note}); saveHistory(h);
-  };
-  reader.onerror=()=>{ err.textContent='خطا.'; err.classList.remove('hidden'); };
+  reader.onload=()=>{ const rec={name,className:cls,note,date:new Date().toLocaleDateString('fa-IR'),fileName:file.name,fileType:file.type,fileData:reader.result.split(',')[1],late:DATA.settings.assignmentDeadline?(new Date()>new Date(DATA.settings.assignmentDeadline)):false}; document.getElementById('uploadCodeBox').value=btoa(unescape(encodeURIComponent(JSON.stringify(rec)))); document.getElementById('uploadCodePanel').classList.remove('hidden'); const h=loadHistory();h.push({type:'assignment',date:new Date().toISOString(),dateLabel:rec.date,fileName:file.name,note});saveHistory(h); };
+  reader.onerror=()=>{err.textContent='خطا.';err.classList.remove('hidden');};
   reader.readAsDataURL(file);
 });
-document.getElementById('copyUploadCodeBtn').addEventListener('click',()=>{
-  const b=document.getElementById('uploadCodeBox'); b.select();
-  if(navigator.clipboard) navigator.clipboard.writeText(b.value).catch(()=>{});
-  const m=document.getElementById('copyUploadMsg'); m.classList.remove('hidden'); setTimeout(()=>m.classList.add('hidden'),1800);
-});
+document.getElementById('copyUploadCodeBtn').addEventListener('click',()=>{ const b=document.getElementById('uploadCodeBox');b.select();if(navigator.clipboard)navigator.clipboard.writeText(b.value).catch(()=>{});const m=document.getElementById('copyUploadMsg');m.classList.remove('hidden');setTimeout(()=>m.classList.add('hidden'),1800); });
 
-document.querySelectorAll('[data-mtab]').forEach(btn=>{ btn.addEventListener('click',()=>{
-  document.querySelectorAll('[data-mtab]').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('.mtab-section').forEach(s=>s.classList.toggle('hidden',s.dataset.mtab!==btn.dataset.mtab));
-});});
+document.querySelectorAll('[data-mtab]').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('[data-mtab]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.mtab-section').forEach(s=>s.classList.toggle('hidden',s.dataset.mtab!==btn.dataset.mtab));});});
 function renderMyProgress(){
   document.querySelectorAll('[data-mtab]').forEach(b=>b.classList.toggle('active',b.dataset.mtab==='history'));
   document.querySelectorAll('.mtab-section').forEach(s=>s.classList.toggle('hidden',s.dataset.mtab!=='history'));
@@ -723,144 +629,65 @@ function renderMyProgress(){
 }
 function renderProgressChart(){
   const exams=loadHistory().filter(h=>h.type==='exam').sort((a,b)=>new Date(a.date)-new Date(b.date));
-  const hero=document.getElementById('progressHero'),chart=document.getElementById('progressChart');
-  if(exams.length===0){hero.innerHTML='<p style="color:var(--ink-faint)">بدون آزمون</p>';chart.innerHTML='';return;}
+  if(exams.length===0){document.getElementById('progressHero').innerHTML='<p style="color:var(--ink-faint)">بدون آزمون</p>';document.getElementById('progressChart').innerHTML='';return;}
   const pcts=exams.map(e=>Math.round((e.score/e.total)*100)),latest=pcts[pcts.length-1];
   let delta='<span class="delta-badge flat">اولین</span>';
   if(pcts.length>1){const d=latest-pcts[pcts.length-2];delta=d>0?`<span class="delta-badge up">▲${d}%</span>`:d<0?`<span class="delta-badge down">▼${Math.abs(d)}%</span>`:`<span class="delta-badge flat">=</span>`;}
-  hero.innerHTML=`<div class="latest">${latest}%</div>${delta}`;
-  const W=640,H=220,pl=36,pr=16,pt=24,pb=30,iw=W-pl-pr,ih=H-pt-pb;
-  const px=i=>exams.length===1?pl+iw/2:pl+(iw*i)/(exams.length-1),py=p=>pt+ih*(1-p/100);
-  const pts=pcts.map((p,i)=>({x:px(i),y:py(p)}));
-  const line=pts.map((p,i)=>(i===0?'M':'L')+p.x.toFixed(1)+','+p.y.toFixed(1)).join(' ');
-  const area=line+` L${pts[pts.length-1].x},${pt+ih} L${pts[0].x},${pt+ih} Z`;
-  const grid=[0,25,50,75,100].map(v=>{const y=py(v);return`<line x1="${pl}" y1="${y}" x2="${W-pr}" y2="${y}" stroke="rgba(255,255,255,.06)"/><text x="${pl-8}" y="${y+4}" font-size="10" fill="#8A7FA3" text-anchor="end" font-family="Space Grotesk">${v}</text>`;}).join('');
-  const dots=pts.map((p,i)=>{const last=i===pts.length-1;return`<circle class="chart-dot${last?' last':''}" cx="${p.x}" cy="${p.y}" r="5" fill="${last?'#C759DE':'#5E8CDE'}" stroke="#0E0A18" stroke-width="2"/>`;}).join('');
-  chart.innerHTML=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;"><defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#C759DE" stop-opacity="0.35"/><stop offset="100%" stop-color="#5E8CDE" stop-opacity="0"/></linearGradient><linearGradient id="lg" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#C759DE"/><stop offset="100%" stop-color="#5E8CDE"/></linearGradient></defs>${grid}<path d="${area}" fill="url(#ag)"/><path d="${line}" fill="none" stroke="url(#lg)" stroke-width="3" stroke-linecap="round"/>${dots}</svg>`;
+  document.getElementById('progressHero').innerHTML=`<div class="latest">${latest}%</div>${delta}`;
+  const W=640,H=220,pl=36,pr=16,pt=24,pb=30,iw=W-pl-pr,ih=H-pt-pb,px=i=>exams.length===1?pl+iw/2:pl+(iw*i)/(exams.length-1),py=p=>pt+ih*(1-p/100),pts=pcts.map((p,i)=>({x:px(i),y:py(p)})),line=pts.map((p,i)=>(i===0?'M':'L')+p.x.toFixed(1)+','+p.y.toFixed(1)).join(' '),area=line+` L${pts[pts.length-1].x},${pt+ih} L${pts[0].x},${pt+ih} Z`,grid=[0,25,50,75,100].map(v=>{const y=py(v);return`<line x1="${pl}" y1="${y}" x2="${W-pr}" y2="${y}" stroke="rgba(255,255,255,.06)"/><text x="${pl-8}" y="${y+4}" font-size="10" fill="#8A7FA3" text-anchor="end" font-family="Space Grotesk">${v}</text>`;}).join(''),dots=pts.map((p,i)=>{const last=i===pts.length-1;return`<circle class="chart-dot${last?' last':''}" cx="${p.x}" cy="${p.y}" r="5" fill="${last?'#C759DE':'#5E8CDE'}" stroke="#0E0A18" stroke-width="2"/>`;}).join('');
+  document.getElementById('progressChart').innerHTML=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;"><defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#C759DE" stop-opacity="0.35"/><stop offset="100%" stop-color="#5E8CDE" stop-opacity="0"/></linearGradient><linearGradient id="lg" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#C759DE"/><stop offset="100%" stop-color="#5E8CDE"/></linearGradient></defs>${grid}<path d="${area}" fill="url(#ag)"/><path d="${line}" fill="none" stroke="url(#lg)" stroke-width="3" stroke-linecap="round"/>${dots}</svg>`;
 }
 
 document.getElementById('passSubmit').addEventListener('click',checkPass);
 document.getElementById('passInput').addEventListener('keydown',e=>{if(e.key==='Enter')checkPass();});
-async function checkPass(){
-  if(document.getElementById('passInput').value===(DATA.settings.adminPass||'Pouria138534')){ sessionStorage.setItem('isAdmin','1'); showView('admin'); }
-  else{document.getElementById('passErr').classList.remove('hidden');}
-}
+function checkPass(){ if(document.getElementById('passInput').value===(DATA.settings.adminPass||'Pouria138534')){sessionStorage.setItem('isAdmin','1');showView('admin');}else{document.getElementById('passErr').classList.remove('hidden');} }
 document.getElementById('logoutBtn').addEventListener('click',()=>{sessionStorage.removeItem('isAdmin');showView('home');});
 
-document.querySelectorAll('[data-atab]').forEach(btn=>{ if(btn.tagName==='BUTTON'){ btn.addEventListener('click',()=>{
-  document.querySelectorAll('.subnav-btn[data-atab]').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('.atab-section').forEach(s=>s.classList.toggle('hidden',s.dataset.atab!==btn.dataset.atab));
-});}});
+document.querySelectorAll('[data-atab]').forEach(btn=>{if(btn.tagName==='BUTTON'){btn.addEventListener('click',()=>{document.querySelectorAll('.subnav-btn[data-atab]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.atab-section').forEach(s=>s.classList.toggle('hidden',s.dataset.atab!==btn.dataset.atab));});}});
 
 function renderAdmin(){
   document.querySelectorAll('.subnav-btn[data-atab]').forEach(b=>b.classList.toggle('active',b.dataset.atab==='content'));
   document.querySelectorAll('.atab-section').forEach(s=>s.classList.toggle('hidden',s.dataset.atab!=='content'));
-  document.getElementById('adminAssignTitle').value=DATA.assignment.title||'';
-  document.getElementById('adminAssignDesc').value=DATA.assignment.description||'';
-  document.getElementById('adminAssignDue').value=DATA.assignment.due||'';
-  document.getElementById('examTimeInput').value=DATA.settings.examTimeLimitMin||0;
-  document.getElementById('assignDeadlineInput').value=DATA.settings.assignmentDeadline||'';
-  resetQuestionForm(); renderTagList(); renderQList(); loadFirebaseGrades();
+  document.getElementById('adminAssignTitle').value=DATA.assignment.title||'';document.getElementById('adminAssignDesc').value=DATA.assignment.description||'';document.getElementById('adminAssignDue').value=DATA.assignment.due||'';
+  document.getElementById('examTimeInput').value=DATA.settings.examTimeLimitMin||0;document.getElementById('assignDeadlineInput').value=DATA.settings.assignmentDeadline||'';
+  resetQuestionForm();renderTagList();renderQList();loadFirebaseGrades();
 }
-document.getElementById('saveAssignBtn').addEventListener('click',async()=>{
-  DATA.assignment.title=document.getElementById('adminAssignTitle').value.trim();
-  DATA.assignment.description=document.getElementById('adminAssignDesc').value.trim();
-  DATA.assignment.due=document.getElementById('adminAssignDue').value.trim();
-  if(await saveCloudConfig()) flashMsg('assignSavedMsg');
-});
-document.getElementById('qType').addEventListener('change',e=>{
-  document.getElementById('mcqFields').classList.toggle('hidden',e.target.value!=='mcq');
-  document.getElementById('blankFields').classList.toggle('hidden',e.target.value==='mcq');
-});
-function renderTagList(){ document.getElementById('tagList').innerHTML=[...new Set(DATA.questions.map(q=>q.tag))].map(t=>`<option value="${escapeAttr(t)}">`).join(''); }
+document.getElementById('saveAssignBtn').addEventListener('click',async()=>{DATA.assignment.title=document.getElementById('adminAssignTitle').value.trim();DATA.assignment.description=document.getElementById('adminAssignDesc').value.trim();DATA.assignment.due=document.getElementById('adminAssignDue').value.trim();if(await saveCloudConfig())flashMsg('assignSavedMsg');});
+document.getElementById('qType').addEventListener('change',e=>{document.getElementById('mcqFields').classList.toggle('hidden',e.target.value!=='mcq');document.getElementById('blankFields').classList.toggle('hidden',e.target.value==='mcq');});
+function renderTagList(){document.getElementById('tagList').innerHTML=[...new Set(DATA.questions.map(q=>q.tag))].map(t=>`<option value="${escapeAttr(t)}">`).join('');}
 document.getElementById('addQBtn').addEventListener('click',async()=>{
-  const err=document.getElementById('addQErr'); err.classList.add('hidden');
+  const err=document.getElementById('addQErr');err.classList.add('hidden');
   const type=document.getElementById('qType').value,tag=document.getElementById('qTag').value.trim(),text=document.getElementById('qText').value.trim(),expl=document.getElementById('qExplain').value.trim();
   if(!tag||!text){err.textContent='موضوع و متن را وارد کن.';err.classList.remove('hidden');return;}
   let payload;
-  if(type==='mcq'){
-    const choices=[...document.querySelectorAll('.mcq-choice')].map(i=>i.value.trim());
-    const radio=document.querySelector('input[name=correctChoice]:checked');
-    if(choices.some(c=>!c)||!radio){err.textContent='گزینه‌ها را کامل کن.';err.classList.remove('hidden');return;}
-    payload={type:'mcq',tag,text,choices,answer:choices[+radio.value],explanation:expl};
-  }else{
-    const ans=document.getElementById('qBlankAnswer').value.trim();
-    if(!ans||!text.includes('___')){err.textContent='پاسخ و ____ را وارد کن.';err.classList.remove('hidden');return;}
-    payload={type:'blank',tag,text,answer:ans,explanation:expl};
-  }
+  if(type==='mcq'){const choices=[...document.querySelectorAll('.mcq-choice')].map(i=>i.value.trim());const radio=document.querySelector('input[name=correctChoice]:checked');if(choices.some(c=>!c)||!radio){err.textContent='گزینه‌ها را کامل کن.';err.classList.remove('hidden');return;}payload={type:'mcq',tag,text,choices,answer:choices[+radio.value],explanation:expl};}
+  else{const ans=document.getElementById('qBlankAnswer').value.trim();if(!ans||!text.includes('___')){err.textContent='پاسخ و ____ را وارد کن.';err.classList.remove('hidden');return;}payload={type:'blank',tag,text,answer:ans,explanation:expl};}
   if(editingQuestionId){const idx=DATA.questions.findIndex(q=>q.id===editingQuestionId);if(idx>-1)DATA.questions[idx]={...DATA.questions[idx],...payload};}
   else{DATA.questions.push({id:Date.now(),...payload});}
   if(await saveCloudConfig()){resetQuestionForm();renderTagList();renderQList();}
 });
 document.getElementById('cancelEditBtn').addEventListener('click',resetQuestionForm);
-function resetQuestionForm(){
-  editingQuestionId=null;
-  document.getElementById('qTag').value='';document.getElementById('qText').value='';document.getElementById('qExplain').value='';
-  document.querySelectorAll('.mcq-choice').forEach(i=>i.value='');
-  document.querySelectorAll('input[name=correctChoice]').forEach(r=>r.checked=false);
-  document.getElementById('qBlankAnswer').value='';
-  document.getElementById('addQBtn').textContent='💾 افزودن به ابر';document.getElementById('cancelEditBtn').classList.add('hidden');
-}
-function startEditQuestion(id){
-  const q=DATA.questions.find(x=>x.id===id);if(!q)return;
-  editingQuestionId=id;
-  document.getElementById('qType').value=q.type;document.getElementById('qType').dispatchEvent(new Event('change'));
-  document.getElementById('qTag').value=q.tag;document.getElementById('qText').value=q.text;document.getElementById('qExplain').value=q.explanation||'';
-  if(q.type==='mcq'){const ci=[...document.querySelectorAll('.mcq-choice')];q.choices.forEach((c,i)=>{if(ci[i])ci[i].value=c;});const r=document.querySelector(`input[name=correctChoice][value="${q.choices.indexOf(q.answer)}"]`);if(r)r.checked=true;}
-  else{document.getElementById('qBlankAnswer').value=q.answer;}
-  document.getElementById('addQBtn').textContent='💾 ذخیره ویرایش';document.getElementById('cancelEditBtn').classList.remove('hidden');
-}
-function renderQList(){
-  document.getElementById('qCount').textContent=toFa(DATA.questions.length);
-  document.getElementById('qList').innerHTML=DATA.questions.length===0?'<p style="color:var(--ink-faint);">خالی</p>':DATA.questions.map(q=>`<div class="qa-list-item"><div class="qa-top"><span class="tag-pill">${escapeHtml(q.tag)}</span><span class="tag-pill">${q.type==='mcq'?'چندگزینه‌ای':'جای‌خالی'}</span><span class="qtxt">${escapeHtml(q.text)}</span><button class="icon-btn" data-edit="${q.id}">✎</button><button class="icon-btn del" data-del="${q.id}">✕</button></div>${q.explanation?`<div class="qa-explain">💡 ${escapeHtml(q.explanation)}</div>`:''}</div>`).join('');
-  document.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>startEditQuestion(+b.dataset.edit)));
-  document.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',async()=>{DATA.questions=DATA.questions.filter(q=>q.id!==+b.dataset.del);if(await saveCloudConfig()){renderTagList();renderQList();}}));
-}
+function resetQuestionForm(){editingQuestionId=null;document.getElementById('qTag').value='';document.getElementById('qText').value='';document.getElementById('qExplain').value='';document.querySelectorAll('.mcq-choice').forEach(i=>i.value='');document.querySelectorAll('input[name=correctChoice]').forEach(r=>r.checked=false);document.getElementById('qBlankAnswer').value='';document.getElementById('addQBtn').textContent='💾 افزودن به ابر';document.getElementById('cancelEditBtn').classList.add('hidden');}
+function startEditQuestion(id){const q=DATA.questions.find(x=>x.id===id);if(!q)return;editingQuestionId=id;document.getElementById('qType').value=q.type;document.getElementById('qType').dispatchEvent(new Event('change'));document.getElementById('qTag').value=q.tag;document.getElementById('qText').value=q.text;document.getElementById('qExplain').value=q.explanation||'';if(q.type==='mcq'){const ci=[...document.querySelectorAll('.mcq-choice')];q.choices.forEach((c,i)=>{if(ci[i])ci[i].value=c;});const r=document.querySelector(`input[name=correctChoice][value="${q.choices.indexOf(q.answer)}"]`);if(r)r.checked=true;}else{document.getElementById('qBlankAnswer').value=q.answer;}document.getElementById('addQBtn').textContent='💾 ذخیره ویرایش';document.getElementById('cancelEditBtn').classList.remove('hidden');}
+function renderQList(){document.getElementById('qCount').textContent=toFa(DATA.questions.length);document.getElementById('qList').innerHTML=DATA.questions.length===0?'<p style="color:var(--ink-faint);">خالی</p>':DATA.questions.map(q=>`<div class="qa-list-item"><div class="qa-top"><span class="tag-pill">${escapeHtml(q.tag)}</span><span class="tag-pill">${q.type==='mcq'?'چندگزینه‌ای':'جای‌خالی'}</span><span class="qtxt">${escapeHtml(q.text)}</span><button class="icon-btn" data-edit="${q.id}">✎</button><button class="icon-btn del" data-del="${q.id}">✕</button></div>${q.explanation?`<div class="qa-explain">💡 ${escapeHtml(q.explanation)}</div>`:''}</div>`).join('');document.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>startEditQuestion(+b.dataset.edit)));document.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',async()=>{DATA.questions=DATA.questions.filter(q=>q.id!==+b.dataset.del);if(await saveCloudConfig()){renderTagList();renderQList();}}));}
 
 document.getElementById('refreshGradesBtn').addEventListener('click',loadFirebaseGrades);
 function loadFirebaseGrades(){
-  const wrap=document.getElementById('studentResultsList');
-  wrap.innerHTML='<p style="color:var(--ink-faint);">در حال بارگذاری...</p>';
-  db.collection("results").get().then(snap=>{
-    const results=[];snap.forEach(d=>results.push({id:d.id,...d.data()}));
-    results.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
-    document.getElementById('srCount').textContent=toFa(results.length);
-    if(results.length===0){wrap.innerHTML='<p style="color:var(--ink-faint);">خالی</p>';return;}
-    wrap.innerHTML=results.map(r=>`<div class="student-row"><span class="sname">${escapeHtml(r.name)}</span><span class="sclass">${escapeHtml(r.className||'—')}</span><span class="grow"></span><span class="sdate">${escapeHtml(r.date)}</span><span class="sscore en">${r.score}/${r.total}</span><button class="icon-btn del" data-fid="${r.id}">✕</button></div>`).join('');
-    wrap.querySelectorAll('.icon-btn.del').forEach(b=>b.addEventListener('click',()=>{db.collection("results").doc(b.dataset.fid).delete().then(()=>loadFirebaseGrades());}));
-  }).catch(()=>{wrap.innerHTML='<p style="color:var(--pink);">خطا</p>';});
+  const wrap=document.getElementById('studentResultsList');wrap.innerHTML='<p style="color:var(--ink-faint);">در حال بارگذاری...</p>';
+  db.collection("results").get().then(snap=>{const results=[];snap.forEach(d=>results.push({id:d.id,...d.data()}));results.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));document.getElementById('srCount').textContent=toFa(results.length);if(results.length===0){wrap.innerHTML='<p style="color:var(--ink-faint);">خالی</p>';return;}wrap.innerHTML=results.map(r=>`<div class="student-row"><span class="sname">${escapeHtml(r.name)}</span><span class="sclass">${escapeHtml(r.className||'—')}</span><span class="grow"></span><span class="sdate">${escapeHtml(r.date)}</span><span class="sscore en">${r.score}/${r.total}</span><button class="icon-btn del" data-fid="${r.id}">✕</button></div>`).join('');wrap.querySelectorAll('.icon-btn.del').forEach(b=>b.addEventListener('click',()=>{db.collection("results").doc(b.dataset.fid).delete().then(()=>loadFirebaseGrades());}));}).catch(()=>{wrap.innerHTML='<p style="color:var(--pink);">خطا</p>';});
 }
-document.getElementById('downloadCsvBtn').addEventListener('click',()=>{
-  const rows=[['نام','کلاس','تاریخ','نمره']];
-  document.querySelectorAll('#studentResultsList .student-row').forEach(r=>{const c=r.querySelectorAll('.sname,.sclass,.sdate,.sscore');if(c.length>=4)rows.push([c[0].textContent,c[1].textContent,c[2].textContent,c[3].textContent]);});
-  const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
-  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv'}));a.download='grades.csv';a.click();
-});
+document.getElementById('downloadCsvBtn').addEventListener('click',()=>{const rows=[['نام','کلاس','تاریخ','نمره']];document.querySelectorAll('#studentResultsList .student-row').forEach(r=>{const c=r.querySelectorAll('.sname,.sclass,.sdate,.sscore');if(c.length>=4)rows.push([c[0].textContent,c[1].textContent,c[2].textContent,c[3].textContent]);});const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv'}));a.download='grades.csv';a.click();});
 
-document.getElementById('savePassBtn').addEventListener('click',async()=>{
-  const p1=document.getElementById('newPassInput').value,p2=document.getElementById('newPassInput2').value;
-  if(!p1||p1!==p2){document.getElementById('passSaveErr').classList.remove('hidden');return;}
-  DATA.settings.adminPass=p1;
-  if(await saveCloudConfig()){document.getElementById('newPassInput').value='';document.getElementById('newPassInput2').value='';flashMsg('passSaveOk');}
-});
-document.getElementById('saveTimingBtn').addEventListener('click',async()=>{
-  DATA.settings.examTimeLimitMin=Math.max(0,+document.getElementById('examTimeInput').value||0);
-  DATA.settings.assignmentDeadline=document.getElementById('assignDeadlineInput').value;
-  if(await saveCloudConfig())flashMsg('timingSavedMsg');
-});
-document.getElementById('resetVersionBtn').addEventListener('click',async()=>{
-  if(!confirm('ادامه؟'))return;
-  DATA.settings.examVersion=(DATA.settings.examVersion||1)+1;
-  if(await saveCloudConfig())flashMsg('resetVersionMsg');
-});
+document.getElementById('savePassBtn').addEventListener('click',async()=>{const p1=document.getElementById('newPassInput').value,p2=document.getElementById('newPassInput2').value;if(!p1||p1!==p2){document.getElementById('passSaveErr').classList.remove('hidden');return;}DATA.settings.adminPass=p1;if(await saveCloudConfig()){document.getElementById('newPassInput').value='';document.getElementById('newPassInput2').value='';flashMsg('passSaveOk');}});
+document.getElementById('saveTimingBtn').addEventListener('click',async()=>{DATA.settings.examTimeLimitMin=Math.max(0,+document.getElementById('examTimeInput').value||0);DATA.settings.assignmentDeadline=document.getElementById('assignDeadlineInput').value;if(await saveCloudConfig())flashMsg('timingSavedMsg');});
+document.getElementById('resetVersionBtn').addEventListener('click',async()=>{if(!confirm('ادامه؟'))return;DATA.settings.examVersion=(DATA.settings.examVersion||1)+1;if(await saveCloudConfig())flashMsg('resetVersionMsg');});
 
 function flashMsg(id){const el=document.getElementById(id);el.classList.remove('hidden');setTimeout(()=>el.classList.add('hidden'),2200);}
 function toFa(n){const m={'0':'۰','1':'۱','2':'۲','3':'۳','4':'۴','5':'۵','6':'۶','7':'۷','8':'۸','9':'۹'};return String(n).split('').map(c=>m[c]??c).join('');}
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function escapeAttr(s){return escapeHtml(s);}
 
-loadCloudConfig().then(()=>{ showView('home'); });
+loadCloudConfig().then(()=>{ showView('home'); }).catch(()=>{ allDataLoaded=true; showView('home'); });
 </script>
 </body>
 </html>
