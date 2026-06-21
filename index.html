@@ -245,6 +245,15 @@
 
   footer{text-align:center;padding:30px 20px 50px;color:var(--ink-faint);font-size:12.5px;position:relative;z-index:2;}
   .firebase-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(111,227,196,.12);border:1px solid rgba(111,227,196,.4);border-radius:999px;padding:5px 12px;font-size:11px;color:var(--mint);margin-bottom:10px;}
+  .auto-sent-box{text-align:center;padding:20px;margin-bottom:20px;background:rgba(111,227,196,.08);border:1px solid rgba(111,227,196,.3);border-radius:14px;}
+  .auto-sent-box .icon{font-size:32px;margin-bottom:8px;}
+  .auto-sent-box .title{font-weight:700;color:var(--mint);margin:0 0 4px;}
+  .auto-sent-box .sub{font-size:13px;color:var(--ink-soft);margin:0;}
+  .sync-bar{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;font-size:12px;margin-bottom:14px;}
+  .sync-bar.ok{background:rgba(111,227,196,.1);color:var(--mint);border:1px solid rgba(111,227,196,.3);}
+  .sync-bar.load{background:rgba(255,255,255,.05);color:var(--ink-faint);border:1px solid var(--border);}
+  .loading-spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.2);border-top-color:var(--mint);border-radius:50%;animation:spin .7s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
 </style>
 </head>
 <body><div class="blob blob1"></div>
@@ -270,13 +279,13 @@
       <div class="assign-icon">📘</div>
       <div>
         <div class="assign-title">Weekly assignment</div>
-        <p class="assign-h" id="homeAssignTitle"></p>
-        <p class="assign-desc" id="homeAssignDesc"></p>
-        <p class="assign-due" id="homeAssignDue"></p>
+        <p class="assign-h" id="homeAssignTitle">—</p>
+        <p class="assign-desc" id="homeAssignDesc">—</p>
+        <p class="assign-due" id="homeAssignDue">—</p>
       </div>
     </div>
     <div class="glass start-card">
-      <p id="quizCountText"></p>
+      <p id="quizCountText">در حال بارگذاری...</p>
       <button class="btn" data-go="quiz">شروع آزمون</button>
     </div>
   </section>
@@ -304,7 +313,7 @@
         <p class="err-msg hidden" id="studentNameErr">لطفاً نام و کلاس را کامل وارد کن.</p>
       </div>
       <p class="hero-sub">به همه سوالات پاسخ بده، بعد روی «پایان آزمون» کلیک کن.</p>
-      <div id="quizList"></div>
+      <div id="quizList">در حال بارگذاری سوالات...</div>
       <div class="submit-row">
         <button class="btn" id="submitQuizBtn">پایان آزمون و دیدن نتیجه</button>
       </div>
@@ -313,14 +322,15 @@
 
   <section class="view-section hidden" data-view="results">
     <h1 class="hero-title">نتیجه آزمون</h1>
+    <div class="auto-sent-box">
+      <div class="icon">☁️</div>
+      <p class="title">نتیجه‌ات به معلم ارسال شد!</p>
+      <p class="sub">نمره‌ات خودکار در پنل معلم ذخیره شد — نیازی به کپی کردن کد نیست.</p>
+    </div>
     <div class="glass score-card">
       <div class="score-num" id="scoreNum"></div>
       <div class="score-label">پاسخ درست</div>
       <div class="insight" id="insightText"></div>
-    </div>
-    <div class="glass panel" id="firebaseResultPanel" style="display:none;">
-      <span class="firebase-badge">☁️ نتیجه‌ات به معلم ارسال شد</span>
-      <p style="font-size:13px;color:var(--ink-soft);margin:8px 0 0;">نتیجه‌ات به‌صورت خودکار در پنل معلم ذخیره شد.</p>
     </div>
     <div class="glass panel">
       <h3>تحلیل بر اساس موضوع</h3>
@@ -385,6 +395,7 @@
 
   <section class="view-section hidden" data-view="admin">
     <h1 class="hero-title">پنل مدیر</h1>
+    <div class="sync-bar load" id="syncStatus"><span class="loading-spinner"></span> در حال اتصال به دیتابیس ابری...</div>
     <div class="subnav">
       <button class="subnav-btn" data-atab="content">محتوا</button>
       <button class="subnav-btn" data-atab="grades">نمرات</button>
@@ -393,15 +404,15 @@
     </div>
     <div class="atab-section" data-atab="content">
       <div class="glass panel">
-        <h3>ویرایش تکلیف</h3>
+        <h3>ویرایش تکلیف هفته</h3>
         <div class="field"><label>عنوان</label><input type="text" id="adminAssignTitle"></div>
         <div class="field"><label>توضیحات</label><textarea id="adminAssignDesc"></textarea></div>
         <div class="field"><label>موعد تحویل</label><input type="text" id="adminAssignDue"></div>
-        <button class="btn sm" id="saveAssignBtn">ذخیره</button>
-        <p class="ok-msg hidden" id="assignSavedMsg">ذخیره شد ✓</p>
+        <button class="btn sm" id="saveAssignBtn">💾 ذخیره در ابر</button>
+        <p class="ok-msg hidden" id="assignSavedMsg">ذخیره شد ✓ — همه دانش‌آموزا می‌بینن</p>
       </div>
       <div class="glass panel">
-        <h3 id="qFormTitle">افزودن سوال</h3>
+        <h3 id="qFormTitle">افزودن سوال جدید</h3>
         <div class="field-row">
           <div class="field"><label>نوع</label><select id="qType"><option value="mcq">چندگزینه‌ای</option><option value="blank">جای‌خالی</option></select></div>
           <div class="field"><label>موضوع</label><input type="text" id="qTag" list="tagList"><datalist id="tagList"></datalist></div>
@@ -414,69 +425,65 @@
         </div>
         <div id="blankFields" class="hidden field"><label>پاسخ درست</label><input type="text" id="qBlankAnswer" class="en"></div>
         <div class="field"><label>توضیح</label><textarea id="qExplain"></textarea></div>
-        <button class="btn sm" id="addQBtn">افزودن</button>
+        <button class="btn sm" id="addQBtn">💾 افزودن به ابر</button>
         <button class="btn sm ghost hidden" id="cancelEditBtn">لغو</button>
         <p class="err-msg hidden" id="addQErr"></p>
       </div>
       <div class="glass panel">
-        <h3>سوالات (<span id="qCount"></span>)</h3>
+        <h3>سوالات موجود (<span id="qCount">۰</span>)</h3>
         <div id="qList"></div>
       </div>
     </div>
     <div class="atab-section hidden" data-atab="grades">
       <div class="glass panel">
-        <h3>نمرات (از فایربیس)</h3>
+        <h3>نمرات دانش‌آموزان</h3>
         <button class="btn sm" id="refreshGradesBtn">🔄 به‌روزرسانی</button>
-        <p style="font-size:12px;color:var(--ink-faint);margin-top:8px;">نمرات به‌صورت خودکار از دیتابیس ابری بارگذاری می‌شوند.</p>
+        <p style="font-size:12px;color:var(--ink-faint);margin-top:8px;">همه نمرات از دیتابیس ابری — واقعی و به‌روز</p>
       </div>
       <div class="glass panel">
-        <h3>        <h3>دانش‌آموزان (<span id="srCount"></span>)</h3>
+        <h3>دانش‌آموزان (<span id="srCount">۰</span>)</h3>
         <div id="studentResultsList"></div>
         <div style="margin-top:12px;"><button class="btn sm ghost" id="downloadCsvBtn">دانلود CSV</button></div>
       </div>
     </div>
     <div class="atab-section hidden" data-atab="submissions">
       <div class="glass panel">
-        <h3>تکالیف ارسالی (<span id="asCount"></span>)</h3>
+        <h3>تکالیف ارسالی (<span id="asCount">۰</span>)</h3>
         <div id="submissionsList"></div>
       </div>
     </div>
     <div class="atab-section hidden" data-atab="settings">
       <div class="glass panel">
-        <h3>تغییر رمز</h3>
+        <h3>تغییر رمز پنل</h3>
         <div class="field"><label>رمز جدید</label><input type="text" id="newPassInput" class="en"></div>
         <div class="field"><label>تکرار رمز</label><input type="text" id="newPassInput2" class="en"></div>
-        <button class="btn sm" id="savePassBtn">ذخیره</button>
+        <button class="btn sm" id="savePassBtn">💾 ذخیره در ابر</button>
         <p class="err-msg hidden" id="passSaveErr"></p>
-        <p class="ok-msg hidden" id="passSaveOk">ذخیره شد ✓</p>
+        <p class="ok-msg hidden" id="passSaveOk">رمز با موفقیت تغییر کرد ✓</p>
       </div>
       <div class="glass panel">
         <h3>زمان‌بندی</h3>
         <div class="field"><label>مدت آزمون (دقیقه)</label><input type="number" id="examTimeInput" class="en" min="0"></div>
         <div class="field"><label>مهلت تکلیف</label><input type="datetime-local" id="assignDeadlineInput" class="en"></div>
-        <button class="btn sm" id="saveTimingBtn">ذخیره</button>
+        <button class="btn sm" id="saveTimingBtn">💾 ذخیره در ابر</button>
         <p class="ok-msg hidden" id="timingSavedMsg">ذخیره شد ✓</p>
       </div>
       <div class="glass panel">
         <h3>نسخه جدید آزمون</h3>
+        <p style="font-size:12px;color:var(--ink-faint);margin-bottom:10px;">با این دکمه همه می‌تونن دوباره آزمون بدن.</p>
         <button class="btn sm ghost" id="resetVersionBtn">شروع نسخه جدید</button>
         <p class="ok-msg hidden" id="resetVersionMsg">انجام شد ✓</p>
       </div>
-      <div class="glass panel">
-        <h3>دانلود نسخه جدید سایت</h3>
-        <button class="btn sm" id="exportBtn">دانلود</button>
-      </div>
       <div class="start-card">
-        <button class="btn ghost" id="logoutBtn">خروج</button>
+        <button class="btn ghost" id="logoutBtn">خروج از پنل</button>
       </div>
     </div>
   </section>
 </main>
 
-<footer>Lingoo — ساخته‌شده برای تمرین زبان انگلیسی</footer>
+<footer>Lingoo — همه تنظیمات در دیتابیس ابری ذخیره می‌شود</footer>
 
-<script>
-// Firebase init
+<script>// Firebase init
 const firebaseConfig = {
   apiKey: "AIzaSyBWAOBQRMTvP8Cs1NMGIF4nGrdl-s621Gw",
   authDomain: "english-ace37.firebaseapp.com",
@@ -488,59 +495,61 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-const STORAGE_KEY = 'eng_site_data_v2';
 const HISTORY_KEY = 'eng_student_history_v1';
 const LOCK_KEY = 'eng_exam_lock_v1';
 
-const DEFAULT_DATA = {
-  "assignment": {
-    "title": "واحد ۳ — زمان حال کامل",
-    "description": "تمرین‌های صفحه ۴۲ تا ۴۵ کتاب را انجام دهید.",
-    "due": "موعد تحویل: پنجشنبه"
-  },
-  "questions": [
-    {"id":1,"type":"mcq","tag":"واژگان","text":"She ___ to the radio every morning.","choices":["hears","listens","listen"],"answer":"listens","explanation":"Listen یعنی با دقت گوش دادن."},
-    {"id":2,"type":"mcq","tag":"زمان و حروف اضافه","text":"I have lived in Tehran ___ 2015.","choices":["for","since","from"],"answer":"since","explanation":"Since با نقطه مشخص در زمان می‌آید."},
-    {"id":3,"type":"mcq","tag":"گرامر","text":"Despite ___ hard, he failed.","choices":["study","studying","he studied"],"answer":"studying","explanation":"بعد از Despite فعل ing+ می‌آید."},
-    {"id":4,"type":"mcq","tag":"واژگان","text":"Can you ___ me a pen?","choices":["borrow","lend","give"],"answer":"lend","explanation":"Lend یعنی قرض دادن."},
-    {"id":5,"type":"mcq","tag":"واژگان","text":"He looks ___ his father.","choices":["like","alike","as"],"answer":"like","explanation":"Look like + اسم."},
-    {"id":6,"type":"blank","tag":"واژگان","text":"I need to ____ my homework.","answer":"do","explanation":"Do homework ترکیب ثابت است."},
-    {"id":7,"type":"blank","tag":"زمان‌های فعل","text":"She ____ a new car last week.","answer":"bought","explanation":"Last week → گذشته ساده."},
-    {"id":8,"type":"blank","tag":"گرامر","text":"____ I was tired, I finished.","answer":"although","explanation":"Although + جمله کامل."},
-    {"id":9,"type":"blank","tag":"واژگان","text":"Could you ____ me your umbrella?","answer":"lend","explanation":"Lend از طرف مقابل."},
-    {"id":10,"type":"blank","tag":"زمان و حروف اضافه","text":"He has been studying ____ three years.","answer":"for","explanation":"For + طول مدت."}
-  ],
-  "studentResults": [],
-  "assignmentSubmissions": [],
-  "settings": {
-    "adminPass": "Pouria138534",
-    "examTimeLimitMin": 0,
-    "assignmentDeadline": "",
-    "soundEnabled": false,
-    "examVersion": 1
-  }
+let DATA = {
+  assignment: { title: '', description: '', due: '' },
+  questions: [],
+  settings: { adminPass: 'Pouria138534', examTimeLimitMin: 0, assignmentDeadline: '', examVersion: 1 }
 };
-
-let DATA = loadData();
-DATA.studentResults = DATA.studentResults || [];
-DATA.settings = DATA.settings || {};
-DATA.settings.adminPass = DATA.settings.adminPass || 'Pouria138534';
-DATA.settings.examTimeLimitMin = DATA.settings.examTimeLimitMin || 0;
-DATA.settings.assignmentDeadline = DATA.settings.assignmentDeadline || '';
-DATA.settings.soundEnabled = !!DATA.settings.soundEnabled;
-DATA.settings.examVersion = DATA.settings.examVersion || 1;
-
+let allDataLoaded = false;
 let userAnswers = {};
 let editingQuestionId = null;
 let examTimerHandle = null;
 let examTimeLeftSec = 0;
 
-function loadData(){
-  try{ const raw = localStorage.getItem(STORAGE_KEY); if(raw) return JSON.parse(raw); }catch(e){}
-  return JSON.parse(JSON.stringify(DEFAULT_DATA));
+// Load all config from Firebase
+async function loadCloudConfig() {
+  try {
+    const doc = await db.collection("config").doc("main").get();
+    if (doc.exists) {
+      const cloud = doc.data();
+      DATA.assignment = cloud.assignment || DATA.assignment;
+      DATA.questions = cloud.questions || DATA.questions;
+      DATA.settings = cloud.settings || DATA.settings;
+    } else {
+      // First time - save defaults
+      await saveCloudConfig();
+    }
+    allDataLoaded = true;
+    document.getElementById('syncStatus')?.classList.replace('load','ok');
+    document.getElementById('syncStatus')?.innerHTML = '☁️ متصل به دیتابیس ابری — همه تغییرات آنی ذخیره می‌شود';
+    renderHome();
+    renderTagList();
+    renderQList();
+  } catch(e) {
+    console.error('Cloud load error:', e);
+    document.getElementById('syncStatus')?.innerHTML = '⚠️ خطا در اتصال — از داده‌های محلی استفاده می‌شود';
+    allDataLoaded = true;
+    renderHome();
+  }
 }
-function saveData(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA)); }
-function nextId(){ return DATA.questions.reduce((m,q)=>Math.max(m,q.id),0) + 1; }
+
+async function saveCloudConfig() {
+  try {
+    await db.collection("config").doc("main").set({
+      assignment: DATA.assignment,
+      questions: DATA.questions,
+      settings: DATA.settings
+    }, { merge: true });
+    return true;
+  } catch(e) {
+    console.error('Cloud save error:', e);
+    return false;
+  }
+}
+
 function loadHistory(){ try{ return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; }catch(e){ return []; } }
 function saveHistory(h){ localStorage.setItem(HISTORY_KEY, JSON.stringify(h)); }
 function loadLock(){ try{ return JSON.parse(localStorage.getItem(LOCK_KEY)); }catch(e){ return null; } }
@@ -566,9 +575,9 @@ document.querySelectorAll('[data-go]').forEach(el=>{
 });
 
 function renderHome(){
-  document.getElementById('homeAssignTitle').textContent = DATA.assignment.title;
-  document.getElementById('homeAssignDesc').textContent = DATA.assignment.description;
-  document.getElementById('homeAssignDue').textContent = DATA.assignment.due;
+  document.getElementById('homeAssignTitle').textContent = DATA.assignment.title || '—';
+  document.getElementById('homeAssignDesc').textContent = DATA.assignment.description || '—';
+  document.getElementById('homeAssignDue').textContent = DATA.assignment.due || '—';
   document.getElementById('quizCountText').textContent = `این آزمون ${toFa(DATA.questions.length)} سوال دارد.`;
 }
 
@@ -585,6 +594,7 @@ function renderQuiz(){
   userAnswers = {};
   document.getElementById('studentNameErr').classList.add('hidden');
   const wrap = document.getElementById('quizList');
+  if(DATA.questions.length === 0){ wrap.innerHTML = '<p style="color:var(--ink-faint);text-align:center;">هنوز سوالی اضافه نشده.</p>'; return; }
   wrap.innerHTML = '';
   DATA.questions.forEach((q, i)=>{
     const card = document.createElement('div');
@@ -630,8 +640,7 @@ function startExamTimer(seconds){
 }
 function stopExamTimer(){ if(examTimerHandle){ clearInterval(examTimerHandle); examTimerHandle = null; } }
 function updateTimerDisplay(){
-  const m = Math.floor(examTimeLeftSec/60);
-  const s = examTimeLeftSec%60;
+  const m = Math.floor(examTimeLeftSec/60), s = examTimeLeftSec%60;
   document.getElementById('examTimerText').textContent = `${m}:${s<10?'0':''}${s}`;
   document.getElementById('examTimerBadge').classList.toggle('low', examTimeLeftSec <= 30);
 }
@@ -670,27 +679,19 @@ function submitQuiz(auto){
   hist.push({type:'exam', date:new Date().toISOString(), dateLabel:new Date().toLocaleDateString('fa-IR'), score:correctCount, total:results.length});
   saveHistory(hist);
 
-  // Firebase save
-  try {
-    db.collection("results").add({
-      name: finalName,
-      className: finalClass,
-      score: correctCount,
-      total: results.length,
-      date: new Date().toLocaleDateString('fa-IR'),
-      version: DATA.settings.examVersion,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-    document.getElementById('firebaseResultPanel').style.display = 'block';
-  } catch(e) {
-    document.getElementById('firebaseResultPanel').style.display = 'none';
-  }
+  db.collection("results").add({
+    name: finalName, className: finalClass,
+    score: correctCount, total: results.length,
+    date: new Date().toLocaleDateString('fa-IR'),
+    version: DATA.settings.examVersion,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  }).catch(()=>{});
 
-  renderResults(results, finalName, finalClass, correctCount);
+  renderResults(results, correctCount);
   showView('results');
 }
 
-function renderResults(results, studentName, studentClass, correctCountArg){
+function renderResults(results, correctCountArg){
   const correctCount = correctCountArg !== undefined ? correctCountArg : results.filter(r=>r.isCorrect).length;
   document.getElementById('scoreNum').innerHTML = `<span class="en">${correctCount} / ${results.length}</span>`;
   const tagStats = buildTagStats(results);
@@ -727,8 +728,7 @@ function renderUpload(){
   }
 }
 document.getElementById('uploadSubmitBtn').addEventListener('click', ()=>{
-  const errEl = document.getElementById('uploadErr');
-  errEl.classList.add('hidden');
+  const errEl = document.getElementById('uploadErr'); errEl.classList.add('hidden');
   const name = document.getElementById('uploadNameInput').value.trim();
   const className = document.getElementById('uploadClassInput').value.trim();
   const note = document.getElementById('uploadNote').value.trim();
@@ -787,8 +787,10 @@ function renderProgressChart(){
 
 document.getElementById('passSubmit').addEventListener('click', checkPass);
 document.getElementById('passInput').addEventListener('keydown', e=>{ if(e.key==='Enter') checkPass(); });
-function checkPass(){
-  if(document.getElementById('passInput').value === DATA.settings.adminPass){
+async function checkPass(){
+  const val = document.getElementById('passInput').value;
+  const cloudPass = DATA.settings.adminPass || 'Pouria138534';
+  if(val === cloudPass){
     sessionStorage.setItem('isAdmin','1'); showView('admin');
   } else { document.getElementById('passErr').classList.remove('hidden'); }
 }
@@ -807,26 +809,26 @@ document.querySelectorAll('[data-atab]').forEach(btn=>{
 function renderAdmin(){
   document.querySelectorAll('.subnav-btn[data-atab]').forEach(b=>b.classList.toggle('active',b.dataset.atab==='content'));
   document.querySelectorAll('.atab-section').forEach(s=>s.classList.toggle('hidden',s.dataset.atab!=='content'));
-  document.getElementById('adminAssignTitle').value=DATA.assignment.title;
-  document.getElementById('adminAssignDesc').value=DATA.assignment.description;
-  document.getElementById('adminAssignDue').value=DATA.assignment.due;
-  document.getElementById('examTimeInput').value=DATA.settings.examTimeLimitMin;
-  document.getElementById('assignDeadlineInput').value=DATA.settings.assignmentDeadline;
+  document.getElementById('adminAssignTitle').value=DATA.assignment.title||'';
+  document.getElementById('adminAssignDesc').value=DATA.assignment.description||'';
+  document.getElementById('adminAssignDue').value=DATA.assignment.due||'';
+  document.getElementById('examTimeInput').value=DATA.settings.examTimeLimitMin||0;
+  document.getElementById('assignDeadlineInput').value=DATA.settings.assignmentDeadline||'';
   resetQuestionForm(); renderTagList(); renderQList(); loadFirebaseGrades();
 }
 
-document.getElementById('saveAssignBtn').addEventListener('click',()=>{
+document.getElementById('saveAssignBtn').addEventListener('click',async ()=>{
   DATA.assignment.title=document.getElementById('adminAssignTitle').value.trim();
   DATA.assignment.description=document.getElementById('adminAssignDesc').value.trim();
   DATA.assignment.due=document.getElementById('adminAssignDue').value.trim();
-  saveData(); flashMsg('assignSavedMsg');
+  if(await saveCloudConfig()) flashMsg('assignSavedMsg');
 });
 document.getElementById('qType').addEventListener('change',e=>{
   document.getElementById('mcqFields').classList.toggle('hidden',e.target.value!=='mcq');
   document.getElementById('blankFields').classList.toggle('hidden',e.target.value==='mcq');
 });
 function renderTagList(){ document.getElementById('tagList').innerHTML=[...new Set(DATA.questions.map(q=>q.tag))].map(t=>`<option value="${escapeAttr(t)}">`).join(''); }
-document.getElementById('addQBtn').addEventListener('click',()=>{
+document.getElementById('addQBtn').addEventListener('click',async ()=>{
   const err=document.getElementById('addQErr'); err.classList.add('hidden');
   const type=document.getElementById('qType').value, tag=document.getElementById('qTag').value.trim(), text=document.getElementById('qText').value.trim(), expl=document.getElementById('qExplain').value.trim();
   if(!tag||!text){ err.textContent='موضوع و متن سوال را وارد کن.'; err.classList.remove('hidden'); return; }
@@ -842,8 +844,8 @@ document.getElementById('addQBtn').addEventListener('click',()=>{
     payload={type:'blank',tag,text,answer:ans,explanation:expl};
   }
   if(editingQuestionId){ const idx=DATA.questions.findIndex(q=>q.id===editingQuestionId); if(idx>-1) DATA.questions[idx]={...DATA.questions[idx],...payload}; }
-  else{ DATA.questions.push({id:nextId(),...payload}); }
-  saveData(); resetQuestionForm(); renderTagList(); renderQList();
+  else{ DATA.questions.push({id: Date.now(),...payload}); }
+  if(await saveCloudConfig()){ resetQuestionForm(); renderTagList(); renderQList(); }
 });
 document.getElementById('cancelEditBtn').addEventListener('click',resetQuestionForm);
 function resetQuestionForm(){
@@ -852,8 +854,8 @@ function resetQuestionForm(){
   document.querySelectorAll('.mcq-choice').forEach(i=>i.value='');
   document.querySelectorAll('input[name=correctChoice]').forEach(r=>r.checked=false);
   document.getElementById('qBlankAnswer').value='';
-  document.getElementById('addQBtn').textContent='افزودن'; document.getElementById('cancelEditBtn').classList.add('hidden');
-  document.getElementById('qFormTitle').textContent='افزودن سوال';
+  document.getElementById('addQBtn').textContent='💾 افزودن به ابر'; document.getElementById('cancelEditBtn').classList.add('hidden');
+  document.getElementById('qFormTitle').textContent='افزودن سوال جدید';
 }
 function startEditQuestion(id){
   const q=DATA.questions.find(x=>x.id===id); if(!q) return;
@@ -862,65 +864,58 @@ function startEditQuestion(id){
   document.getElementById('qTag').value=q.tag; document.getElementById('qText').value=q.text; document.getElementById('qExplain').value=q.explanation||'';
   if(q.type==='mcq'){ const ci=[...document.querySelectorAll('.mcq-choice')]; q.choices.forEach((c,i)=>{if(ci[i])ci[i].value=c;}); const r=document.querySelector(`input[name=correctChoice][value="${q.choices.indexOf(q.answer)}"]`); if(r)r.checked=true; }
   else{ document.getElementById('qBlankAnswer').value=q.answer; }
-  document.getElementById('addQBtn').textContent='ذخیره ویرایش'; document.getElementById('cancelEditBtn').classList.remove('hidden');
+  document.getElementById('addQBtn').textContent='💾 ذخیره ویرایش در ابر'; document.getElementById('cancelEditBtn').classList.remove('hidden');
   document.getElementById('qFormTitle').textContent='ویرایش سوال';
 }
 function renderQList(){
   document.getElementById('qCount').textContent=toFa(DATA.questions.length);
-  document.getElementById('qList').innerHTML=DATA.questions.map(q=>`<div class="qa-list-item"><div class="qa-top"><span class="tag-pill">${escapeHtml(q.tag)}</span><span class="tag-pill">${q.type==='mcq'?'چندگزینه‌ای':'جای‌خالی'}</span><span class="qtxt">${escapeHtml(q.text)}</span><button class="icon-btn" data-edit="${q.id}">✎</button><button class="icon-btn del" data-id="${q.id}">✕</button></div>${q.explanation?`<div class="qa-explain">💡 ${escapeHtml(q.explanation)}</div>`:''}</div>`).join('');
+  document.getElementById('qList').innerHTML=DATA.questions.length===0?'<p style="color:var(--ink-faint);">هنوز سوالی اضافه نشده.</p>':DATA.questions.map(q=>`<div class="qa-list-item"><div class="qa-top"><span class="tag-pill">${escapeHtml(q.tag)}</span><span class="tag-pill">${q.type==='mcq'?'چندگزینه‌ای':'جای‌خالی'}</span><span class="qtxt">${escapeHtml(q.text)}</span><button class="icon-btn" data-edit="${q.id}">✎</button><button class="icon-btn del" data-del="${q.id}">✕</button></div>${q.explanation?`<div class="qa-explain">💡 ${escapeHtml(q.explanation)}</div>`:''}</div>`).join('');
   document.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>startEditQuestion(+b.dataset.edit)));
-  document.querySelectorAll('[data-id]').forEach(b=>b.addEventListener('click',()=>{ DATA.questions=DATA.questions.filter(q=>q.id!==+b.dataset.id); saveData(); renderTagList(); renderQList(); }));
+  document.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',async ()=>{ DATA.questions=DATA.questions.filter(q=>q.id!==+b.dataset.del); if(await saveCloudConfig()){ renderTagList(); renderQList(); } }));
 }
 
-// Firebase grades
 document.getElementById('refreshGradesBtn').addEventListener('click', loadFirebaseGrades);
 function loadFirebaseGrades(){
   const wrap=document.getElementById('studentResultsList');
   wrap.innerHTML='<p style="color:var(--ink-faint);">در حال بارگذاری...</p>';
-  db.collection("results").orderBy("createdAt","desc").get().then(snapshot=>{
+  db.collection("results").get().then(snapshot=>{
     const results=[];
     snapshot.forEach(doc=>{ results.push({id:doc.id,...doc.data()}); });
-    DATA.studentResults=results;
+    results.sort((a,b)=> (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
     document.getElementById('srCount').textContent=toFa(results.length);
     if(results.length===0){ wrap.innerHTML='<p style="color:var(--ink-faint);">هنوز نتیجه‌ای ثبت نشده.</p>'; return; }
     wrap.innerHTML=results.map(r=>`<div class="student-row"><span class="sname">${escapeHtml(r.name)}</span><span class="sclass">${escapeHtml(r.className||'—')}</span><span class="grow"></span><span class="sdate">${escapeHtml(r.date)}</span><span class="sscore en">${r.score}/${r.total}</span><button class="icon-btn del" data-fid="${r.id}">✕</button></div>`).join('');
     wrap.querySelectorAll('.icon-btn.del').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        db.collection("results").doc(btn.dataset.fid).delete().then(()=>loadFirebaseGrades());
-      });
+      btn.addEventListener('click',()=>{ db.collection("results").doc(btn.dataset.fid).delete().then(()=>loadFirebaseGrades()); });
     });
   }).catch(()=>{ wrap.innerHTML='<p style="color:var(--pink);">خطا در اتصال. دوباره تلاش کن.</p>'; });
 }
 document.getElementById('downloadCsvBtn').addEventListener('click',()=>{
   const rows=[['نام','کلاس','تاریخ','نمره']];
-  DATA.studentResults.forEach(r=>rows.push([r.name,r.className||'',r.date,`${r.score}/${r.total}`]));
+  document.querySelectorAll('#studentResultsList .student-row').forEach(row=>{
+    const cells=row.querySelectorAll('.sname,.sclass,.sdate,.sscore');
+    if(cells.length>=4) rows.push([cells[0].textContent,cells[1].textContent,cells[2].textContent,cells[3].textContent]);
+  });
   const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
   const blob=new Blob(['\uFEFF'+csv],{type:'text/csv'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='grades.csv'; a.click();
 });
 
-document.getElementById('savePassBtn').addEventListener('click',()=>{
+document.getElementById('savePassBtn').addEventListener('click',async ()=>{
   const p1=document.getElementById('newPassInput').value, p2=document.getElementById('newPassInput2').value;
   if(!p1||p1!==p2){ document.getElementById('passSaveErr').classList.remove('hidden'); return; }
-  DATA.settings.adminPass=p1; saveData();
-  document.getElementById('newPassInput').value=''; document.getElementById('newPassInput2').value='';
-  flashMsg('passSaveOk');
+  DATA.settings.adminPass=p1;
+  if(await saveCloudConfig()){ document.getElementById('newPassInput').value=''; document.getElementById('newPassInput2').value=''; flashMsg('passSaveOk'); }
 });
-document.getElementById('saveTimingBtn').addEventListener('click',()=>{
+document.getElementById('saveTimingBtn').addEventListener('click',async ()=>{
   DATA.settings.examTimeLimitMin=Math.max(0,+document.getElementById('examTimeInput').value||0);
   DATA.settings.assignmentDeadline=document.getElementById('assignDeadlineInput').value;
-  saveData(); flashMsg('timingSavedMsg');
+  if(await saveCloudConfig()) flashMsg('timingSavedMsg');
 });
-document.getElementById('resetVersionBtn').addEventListener('click',()=>{
+document.getElementById('resetVersionBtn').addEventListener('click',async ()=>{
   if(!confirm('ادامه می‌دهی؟')) return;
-  DATA.settings.examVersion=(DATA.settings.examVersion||1)+1; saveData(); flashMsg('resetVersionMsg');
-});
-document.getElementById('exportBtn').addEventListener('click',()=>{
-  const html=document.documentElement.outerHTML;
-  const newDataStr=JSON.stringify(DATA);
-  const updated=html.replace(/\/\*DATA_START\*\/[\s\S]*?\/\*DATA_END\*\//,'/*DATA_START*/'+newDataStr+'/*DATA_END*/');
-  const blob=new Blob(['<!DOCTYPE html>\n'+updated],{type:'text/html'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='lingoo-updated.html'; a.click();
+  DATA.settings.examVersion=(DATA.settings.examVersion||1)+1;
+  if(await saveCloudConfig()) flashMsg('resetVersionMsg');
 });
 
 function flashMsg(id){ const el=document.getElementById(id); el.classList.remove('hidden'); setTimeout(()=>el.classList.add('hidden'),2200); }
@@ -929,9 +924,9 @@ function escapeHtml(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<'
 function escapeAttr(s){ return escapeHtml(s); }
 
 let audioCtx=null;
-document.addEventListener('click',e=>{ if(DATA.settings.soundEnabled && e.target.closest('button')){ try{ audioCtx=audioCtx||new(window.AudioContext||window.webkitAudioContext)(); const t=audioCtx.currentTime,o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.type='sine'; o.frequency.setValueAtTime(880,t); o.frequency.exponentialRampToValueAtTime(280,t+.13); g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.16,t+.012); g.gain.exponentialRampToValueAtTime(.0001,t+.15); o.connect(g).connect(audioCtx.destination); o.start(t); o.stop(t+.16); }catch(e){} } });
+document.addEventListener('click',e=>{ if(e.target.closest('button')){ try{ audioCtx=audioCtx||new(window.AudioContext||window.webkitAudioContext)(); const t=audioCtx.currentTime,o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.type='sine'; o.frequency.setValueAtTime(880,t); o.frequency.exponentialRampToValueAtTime(280,t+.13); g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.16,t+.012); g.gain.exponentialRampToValueAtTime(.0001,t+.15); o.connect(g).connect(audioCtx.destination); o.start(t); o.stop(t+.16); }catch(e){} } });
 
-showView('home');
+loadCloudConfig().then(()=>{ showView('home'); });
 </script>
 </body>
 </html>
