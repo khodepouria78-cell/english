@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تمرین زبان انگلیسی</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0E0A18;
+    --ink:#F1ECFA;
+    --ink-soft:#B9AFD1;
+    --ink-faint:#8A7FA3;
+    --glass:rgba(255,255,255,.045);
+    --glass-strong:rgba(255,255,255,.08);
+    --border:rgba(255,255,255,.10);
+    --border-strong:rgba(255,255,255,.18);
+    --purple:#C759DE;
+    --blue:#5E8CDE;
+    --mint:#6FE3C4;
+    --pink:#FF6B9D;
+    --grad: linear-gradient(135deg, var(--purple), var(--blue));
+    --radius:18px;
+    --font-fa:'Vazirmatn', sans-serif;
+    --font-en:'Space Grotesk', sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);}
+  body{font-family:var(--font-fa);line-height:1.75;min-height:100vh;-webkit-font-smoothing:antialiased;}
+  .en{font-family:var(--font-en);direction:ltr;unicode-bidi:isolate;}
+  a{color:var(--blue);}
+  :focus-visible{outline:2px solid var(--blue);outline-offset:2px;}
+  .hidden{display:none !important;}
+
+  .blob{position:fixed;border-radius:50%;filter:blur(20px);z-index:0;pointer-events:none;}
+  .blob1{width:480px;height:480px;background:radial-gradient(circle,rgba(199,89,222,.30),transparent 70%);top:-160px;left:-140px;animation:drift1 26s ease-in-out infinite alternate;}
+  .blob2{width:420px;height:420px;background:radial-gradient(circle,rgba(94,140,222,.28),transparent 70%);bottom:-160px;right:-120px;animation:drift2 30s ease-in-out infinite alternate;}
+  .blob3{width:320px;height:320px;background:radial-gradient(circle,rgba(111,227,196,.16),transparent 70%);top:40%;right:10%;animation:drift1 22s ease-in-out infinite alternate;}
+  @keyframes drift1{from{transform:translate(0,0);}to{transform:translate(40px,30px);}}
+  @keyframes drift2{from{transform:translate(0,0);}to{transform:translate(-30px,-40px);}}
+  @media (prefers-reduced-motion:reduce){.blob{animation:none;}}
+
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:40;
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:14px 22px;flex-wrap:wrap;
+    background:rgba(14,10,24,.55);backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--border);
+  }
+  .brand{font-weight:800;font-size:16px;display:flex;align-items:center;gap:8px;}
+  .nav-btns{display:flex;gap:6px;flex-wrap:wrap;}
+  .nav-btn{
+    font-family:var(--font-fa);background:transparent;border:1px solid var(--border);
+    color:var(--ink-soft);padding:7px 13px;border-radius:999px;
+    font-size:13px;cursor:pointer;transition:.2s;
+  }
+  .nav-btn:hover{border-color:var(--border-strong);color:var(--ink);}
+  .nav-btn.active{background:var(--glass-strong);color:var(--ink);border-color:var(--border-strong);}
+
+  main{position:relative;z-index:2;max-width:780px;margin:0 auto;padding:110px 20px 80px;}
+
+  .glass{
+    background:var(--glass);backdrop-filter:blur(18px);
+    border:1px solid var(--border);border-radius:var(--radius);
+    box-shadow:0 8px 32px rgba(0,0,0,.35);
+  }
+
+  .hero-title{font-size:clamp(24px,5vw,36px);font-weight:800;margin:0 0 8px;}
+  .hero-sub{color:var(--ink-soft);font-size:14.5px;margin:0 0 28px;}
+
+  .assign-card{padding:24px;margin-bottom:20px;display:flex;gap:16px;align-items:flex-start;}
+  .assign-icon{width:46px;height:46px;border-radius:14px;flex-shrink:0;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:20px;}
+  .assign-title{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-faint);font-family:var(--font-en);direction:ltr;margin-bottom:6px;}
+  .assign-h{font-size:18px;font-weight:700;margin:0 0 6px;}
+  .assign-desc{font-size:14.5px;color:var(--ink-soft);margin:0 0 10px;}
+  .assign-due{font-size:12.5px;color:var(--mint);font-weight:600;}
+
+  .start-card{padding:26px;text-align:center;}
+  .start-card p{color:var(--ink-soft);font-size:14px;margin:6px 0 16px;}
+  .btn{
+    font-family:var(--font-fa);border:none;color:#fff;background:var(--grad);
+    padding:11px 26px;border-radius:999px;font-size:14.5px;font-weight:700;cursor:pointer;
+    transition:transform .15s, box-shadow .2s;box-shadow:0 6px 22px rgba(199,89,222,.28);
+  }
+  .btn:hover{transform:translateY(-1px);}
+  .btn.ghost{background:transparent;border:1px solid var(--border-strong);box-shadow:none;color:var(--ink);}
+  .btn.sm{padding:8px 16px;font-size:13px;}
+  .btn:disabled{opacity:.5;cursor:default;transform:none;}
+
+  .warn-banner{
+    background:rgba(255,107,157,.10);border:1px solid rgba(255,107,157,.4);
+    border-radius:14px;padding:14px 16px;margin-bottom:20px;font-size:13.5px;
+    color:#FFD7E4;line-height:1.85;
+  }
+  .warn-banner b{color:#fff;}
+
+  .timer-badge{
+    display:inline-flex;align-items:center;gap:6px;font-family:var(--font-en);direction:ltr;
+    background:rgba(255,255,255,.06);border:1px solid var(--border-strong);
+    border-radius:999px;padding:6px 14px;font-size:13px;margin-bottom:18px;color:var(--ink);
+  }
+  .timer-badge.low{border-color:var(--pink);color:var(--pink);}
+
+  .name-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:6px;}
+  .name-row .field{flex:1;min-width:160px;}
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:13px;color:var(--ink-soft);margin-bottom:6px;}
+  .field input, .field textarea, .field select{
+    width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border-strong);
+    color:var(--ink);border-radius:10px;padding:9px 12px;font-size:14px;font-family:var(--font-fa);
+  }
+  .field textarea{resize:vertical;min-height:64px;}
+  .field-row{display:flex;gap:12px;}
+  .field-row .field{flex:1;}
+
+  .q-card{padding:20px;margin-bottom:16px;}
+  .q-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+  .q-num{font-family:var(--font-en);direction:ltr;font-size:12px;color:var(--ink-faint);}
+  .tag-pill{font-size:11px;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--ink-soft);}
+  .q-text{font-size:15.5px;font-weight:600;margin:0 0 14px;}
+  .choices{display:flex;flex-wrap:wrap;gap:10px;}
+  .choice-btn{
+    font-family:var(--font-en);direction:ltr;border:1px solid var(--border-strong);
+    background:rgba(255,255,255,.04);color:var(--ink);padding:9px 16px;border-radius:999px;
+    font-size:14px;cursor:pointer;transition:.15s;
+  }
+  .choice-btn:hover{border-color:var(--blue);}
+  .choice-btn.selected{background:rgba(94,140,222,.22);border-color:var(--blue);}
+  .choice-btn.correct{background:rgba(111,227,196,.18);border-color:var(--mint);color:var(--mint);}
+  .choice-btn.wrong{background:rgba(255,107,157,.16);border-color:var(--pink);color:var(--pink);}
+  .choice-btn:disabled{cursor:default;}
+  .blank-input{
+    font-family:var(--font-en);direction:ltr;background:rgba(255,255,255,.05);
+    border:1px solid var(--border-strong);color:var(--ink);border-radius:10px;
+    padding:9px 14px;font-size:14.5px;width:160px;
+  }
+  .blank-input:disabled{opacity:.85;}
+  .blank-input.correct{border-color:var(--mint);background:rgba(111,227,196,.12);}
+  .blank-input.wrong{border-color:var(--pink);background:rgba(255,107,157,.12);}
+  .submit-row{text-align:center;margin-top:8px;}
+
+  .score-card{padding:30px;text-align:center;margin-bottom:24px;}
+  .score-num{font-family:var(--font-en);direction:ltr;font-size:44px;font-weight:700;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .score-label{color:var(--ink-soft);font-size:13.5px;margin-top:4px;}
+  .insight{margin-top:18px;font-size:14px;color:var(--ink-soft);line-height:1.9;text-align:right;background:rgba(255,255,255,.04);border-radius:12px;padding:14px 16px;}
+  .insight b{color:var(--ink);}
+
+  .panel{padding:22px;margin-bottom:22px;}
+  .panel h3{font-size:16px;margin:0 0 14px;}
+
+  .tag-row{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+  .tag-row .name{width:150px;font-size:13.5px;color:var(--ink-soft);flex-shrink:0;}
+  .bar-track{flex:1;height:8px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden;}
+  .bar-fill{height:100%;border-radius:999px;background:var(--grad);}
+  .tag-pct{font-family:var(--font-en);direction:ltr;font-size:13px;width:38px;text-align:left;color:var(--ink-faint);}
+
+  .review-item{padding:16px;margin-bottom:10px;}
+  .review-top{display:flex;gap:12px;align-items:flex-start;}
+  .review-mark{font-size:16px;flex-shrink:0;margin-top:2px;}
+  .review-mark.ok{color:var(--mint);}
+  .review-mark.bad{color:var(--pink);}
+  .review-q{font-size:14px;font-weight:600;margin:0 0 4px;}
+  .review-a{font-size:12.5px;color:var(--ink-soft);font-family:var(--font-en);direction:ltr;}
+  .review-a .right{color:var(--mint);}
+  .review-a .wrongtxt{color:var(--pink);text-decoration:line-through;}
+  .explain-box{
+    margin-top:10px;margin-right:28px;font-size:13px;color:var(--ink-soft);
+    background:rgba(94,140,222,.08);border:1px solid rgba(94,140,222,.22);
+    border-radius:10px;padding:10px 12px;line-height:1.8;
+  }
+
+  .code-box{
+    width:100%;font-family:var(--font-en);direction:ltr;background:rgba(255,255,255,.05);
+    border:1px solid var(--border-strong);color:var(--ink-soft);border-radius:10px;
+    padding:10px;font-size:11px;resize:vertical;min-height:60px;margin-bottom:10px;
+  }
+  .copy-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+  .copy-msg{font-size:12.5px;color:var(--mint);}
+  .late-tag{display:inline-block;font-size:11.5px;background:rgba(255,107,157,.16);color:var(--pink);border:1px solid rgba(255,107,157,.35);border-radius:999px;padding:3px 10px;margin-bottom:10px;}
+
+  .gate-card{padding:30px;text-align:center;max-width:340px;margin:40px auto;}
+  .gate-card input{
+    font-family:var(--font-en);direction:ltr;width:100%;text-align:center;
+    background:rgba(255,255,255,.05);border:1px solid var(--border-strong);color:var(--ink);
+    border-radius:10px;padding:10px;font-size:15px;margin:14px 0;
+  }
+  .gate-note{font-size:12px;color:var(--ink-faint);margin-top:10px;}
+
+  .subnav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;}
+  .subnav-btn{
+    font-family:var(--font-fa);background:rgba(255,255,255,.04);border:1px solid var(--border);
+    color:var(--ink-soft);padding:8px 16px;border-radius:999px;font-size:13px;cursor:pointer;
+  }
+  .subnav-btn.active{background:var(--glass-strong);color:var(--ink);border-color:var(--border-strong);}
+
+  .mcq-choice-row{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
+  .mcq-choice-row input[type=text]{flex:1;}
+  .qa-list-item{padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.03);margin-bottom:8px;font-size:13px;}
+  .qa-top{display:flex;align-items:center;gap:10px;}
+  .qa-top .qtxt{flex:1;color:var(--ink-soft);font-family:var(--font-en);direction:ltr;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .qa-explain{margin-top:6px;font-size:11.5px;color:var(--ink-faint);}
+  .icon-btn{background:transparent;border:1px solid var(--border);color:var(--ink-soft);border-radius:8px;width:26px;height:26px;cursor:pointer;font-size:12px;flex-shrink:0;}
+  .icon-btn.del{color:var(--pink);}
+  .err-msg{color:var(--pink);font-size:12.5px;margin-top:8px;}
+  .ok-msg{color:var(--mint);font-size:12.5px;margin-top:8px;}
+  .export-note{font-size:12.5px;color:var(--ink-faint);margin-top:10px;line-height:1.8;}
+
+  .switch-row{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px;}
+  .switch-text .t1{font-size:14px;font-weight:600;}
+  .switch-text .t2{font-size:12px;color:var(--ink-faint);}
+  .switch{position:relative;width:46px;height:26px;flex-shrink:0;}
+  .switch input{opacity:0;width:0;height:0;}
+  .slider{position:absolute;inset:0;background:rgba(255,255,255,.12);border:1px solid var(--border-strong);border-radius:999px;cursor:pointer;transition:.2s;}
+  .slider:before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;}
+  .switch input:checked + .slider{background:var(--grad);}
+  .switch input:checked + .slider:before{transform:translateX(-20px);}
+
+  .student-row{padding:11px 14px;border-radius:12px;background:rgba(255,255,255,.03);margin-bottom:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .student-row .sname{font-size:14px;font-weight:600;}
+  .student-row .sclass{font-size:12px;color:var(--ink-faint);}
+  .student-row .sdate{font-size:12px;color:var(--ink-faint);}
+  .student-row .sscore{font-family:var(--font-en);direction:ltr;font-size:14px;color:var(--mint);font-weight:700;}
+  .student-row .grow{flex:1;}
+
+  .history-item{display:flex;gap:14px;align-items:flex-start;padding:14px;margin-bottom:10px;}
+  .history-icon{width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+  .history-h{font-size:14px;font-weight:700;margin:0 0 3px;}
+  .history-d{font-size:12px;color:var(--ink-faint);}
+  .empty-note{font-size:13.5px;color:var(--ink-faint);text-align:center;padding:30px 10px;}
+
+  .progress-hero{padding:28px;text-align:center;margin-bottom:22px;}
+  .progress-hero .latest{font-family:var(--font-en);direction:ltr;font-size:40px;font-weight:700;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .delta-badge{display:inline-block;margin-top:10px;font-family:var(--font-en);direction:ltr;font-size:13px;padding:4px 12px;border-radius:999px;}
+  .delta-badge.up{background:rgba(111,227,196,.16);color:var(--mint);border:1px solid rgba(111,227,196,.4);}
+  .delta-badge.down{background:rgba(255,107,157,.16);color:var(--pink);border:1px solid rgba(255,107,157,.4);}
+  .delta-badge.flat{background:rgba(255,255,255,.08);color:var(--ink-soft);border:1px solid var(--border-strong);}
+  .chart-wrap{padding:20px;}
+  .chart-dot{transition:r .2s;}
+  .chart-dot.last{animation:pulseDot 1.8s ease-in-out infinite;}
+  @keyframes pulseDot{0%,100%{r:5;}50%{r:7.5;}}
+  @media (prefers-reduced-motion:reduce){.chart-dot.last{animation:none;}}
+
+  footer{text-align:center;padding:30px 20px 50px;color:var(--ink-faint);font-size:12.5px;position:relative;z-index:2;}
+</style>
+</head>
+<body>
+
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+<div class="blob blob3"></div>
+
+<nav>
+  <div class="brand">🌌 <span>تمرین زبان انگلیسی</span></div>
+  <div class="nav-btns">
+    <button class="nav-btn" data-go="home">صفحه اصلی</button>
+    <button class="nav-btn" data-go="quiz">آزمون</button>
+    <button class="nav-btn" data-go="upload">تکلیف</button>
+    <button class="nav-btn" data-go="myprogress">پیشرفت من</button>
+    <button class="nav-btn" data-go="admin">پنل مدیر</button>
+  </div>
+</nav>
+
+<main>
+
+  <!-- HOME -->
+  <section class="view-section" data-view="home">
+    <h1 class="hero-title">سلام، زبان‌آموز 👋</h1>
+    <p class="hero-sub">تکلیف این هفته رو ببین، آزمون رو شروع کن یا پیشرفتت رو دنبال کن.</p>
+
+    <div class="glass assign-card">
+      <div class="assign-icon">📘</div>
+      <div>
+        <div class="assign-title">Weekly assignment</div>
+        <p class="assign-h" id="homeAssignTitle"></p>
+        <p class="assign-desc" id="homeAssignDesc"></p>
+        <p class="assign-due" id="homeAssignDue"></p>
+      </div>
+    </div>
+
+    <div class="glass start-card">
+      <p id="quizCountText"></p>
+      <button class="btn" data-go="quiz">شروع آزمون</button>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="view-section hidden" data-view="quiz">
+    <h1 class="hero-title">آزمون</h1>
+
+    <div id="quizLockedBox" class="hidden">
+      <div class="glass gate-card">
+        <div style="font-size:26px;">✅</div>
+        <p style="margin-top:10px;font-weight:700;">شما قبلاً در این آزمون شرکت کرده‌اید</p>
+        <p style="font-size:13px;color:var(--ink-soft);margin-top:6px;" id="lockedScoreText"></p>
+        <p class="gate-note">هر دانش‌آموز فقط یک بار می‌تواند این نسخه از آزمون را بدهد. برای دیدن جزئیات بیشتر به بخش «پیشرفت من» برو.</p>
+      </div>
+    </div>
+
+    <div id="quizOpenBox">
+      <div class="warn-banner">
+        ⚠️ <b>توجه:</b> نام، نام خانوادگی و کلاس را حتماً کامل و درست وارد کن. قبل از زدن دکمه «پایان آزمون»، یک بار همه پاسخ‌هایت را بازبینی کن — بعد از ثبت، امکان تغییر یا تلاش دوباره وجود ندارد.
+      </div>
+
+      <div id="examTimerBadge" class="timer-badge hidden">⏱ <span id="examTimerText"></span></div>
+
+      <div class="glass panel">
+        <div class="name-row">
+          <div class="field"><label>نام و نام خانوادگی</label><input type="text" id="studentNameInput" placeholder="مثلاً سارا محمدی"></div>
+          <div class="field"><label>نام یا شماره کلاس</label><input type="text" id="studentClassInput" placeholder="مثلاً کلاس ۲ یا English-B"></div>
+        </div>
+        <p class="err-msg hidden" id="studentNameErr">لطفاً نام و کلاس را کامل وارد کن.</p>
+      </div>
+
+      <p class="hero-sub">به همه سوالات پاسخ بده، بعد روی «پایان آزمون» کلیک کن تا نتیجه و تحلیلت رو ببینی.</p>
+      <div id="quizList"></div>
+      <div class="submit-row">
+        <button class="btn" id="submitQuizBtn">پایان آزمون و دیدن نتیجه</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section class="view-section hidden" data-view="results">
+    <h1 class="hero-title">نتیجه آزمون</h1>
+    <div class="glass score-card">
+      <div class="score-num" id="scoreNum"></div>
+      <div class="score-label">پاسخ درست</div>
+      <div class="insight" id="insightText"></div>
+    </div>
+
+    <div class="glass panel">
+      <h3>ارسال نتیجه به معلم</h3>
+      <p style="font-size:13.5px;color:var(--ink-soft);">این کد رو کپی کن و برای معلمت بفرست تا نمره‌ت توی پنل مدیر ثبت بشه.</p>
+      <textarea class="code-box" id="resultCodeBox" readonly></textarea>
+      <div class="copy-row">
+        <button class="btn sm" id="copyCodeBtn">کپی کد نتیجه</button>
+        <span class="copy-msg hidden" id="copyMsg">کپی شد ✓</span>
+      </div>
+    </div>
+
+    <div class="glass panel">
+      <h3>تحلیل بر اساس موضوع</h3>
+      <div id="tagStats"></div>
+    </div>
+
+    <div class="glass panel">
+      <h3>بررسی تک‌به‌تک سوالات</h3>
+      <div id="reviewList"></div>
+    </div>
+
+    <div class="start-card">
+      <button class="btn ghost" data-go="home">بازگشت به صفحه اصلی</button>
+    </div>
+  </section>
+
+  <!-- UPLOAD ASSIGNMENT -->
+  <section class="view-section hidden" data-view="upload">
+    <h1 class="hero-title">آپلود تکلیف</h1>
+    <p class="hero-sub">فایل تکلیف انجام‌شده‌ت رو آپلود کن. بعد از آپلود، یک کد برات ساخته می‌شه که باید برای معلم بفرستی.</p>
+
+    <p class="late-tag hidden" id="deadlineLateTag">⚠️ مهلت تحویل این تکلیف گذشته است</p>
+    <p style="font-size:12.5px;color:var(--ink-faint);margin-bottom:14px;" id="deadlineInfoText"></p>
+
+    <div class="glass panel">
+      <div class="name-row">
+        <div class="field"><label>نام و نام خانوادگی</label><input type="text" id="uploadNameInput" placeholder="مثلاً سارا محمدی"></div>
+        <div class="field"><label>نام یا شماره کلاس</label><input type="text" id="uploadClassInput" placeholder="مثلاً کلاس ۲"></div>
+      </div>
+      <div class="field">
+        <label>فایل تکلیف (عکس، PDF یا Word — حداکثر حدود ۱.۵ مگابایت)</label>
+        <input type="file" id="uploadFileInput" accept="image/*,.pdf,.doc,.docx">
+      </div>
+      <div class="field"><label>توضیح (اختیاری)</label><textarea id="uploadNote" placeholder="مثلاً: تمرین صفحه ۴۴ رو هم انجام دادم"></textarea></div>
+      <button class="btn sm" id="uploadSubmitBtn">آپلود و ساخت کد ارسال</button>
+      <p class="err-msg hidden" id="uploadErr"></p>
+    </div>
+
+    <div class="glass panel hidden" id="uploadCodePanel">
+      <h3>کد ارسال تکلیف</h3>
+      <p style="font-size:13.5px;color:var(--ink-soft);">این کد رو برای معلمت بفرست تا تکلیفت ثبت بشه.</p>
+      <textarea class="code-box" id="uploadCodeBox" readonly></textarea>
+      <div class="copy-row">
+        <button class="btn sm" id="copyUploadCodeBtn">کپی کد تکلیف</button>
+        <span class="copy-msg hidden" id="copyUploadMsg">کپی شد ✓</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- MY PROGRESS (history + chart) -->
+  <section class="view-section hidden" data-view="myprogress">
+    <h1 class="hero-title">پیشرفت من</h1>
+    <div class="subnav">
+      <button class="subnav-btn" data-mtab="history">تاریخچه</button>
+      <button class="subnav-btn" data-mtab="progress">نمودار پیشرفت</button>
+    </div>
+
+    <div class="mtab-section" data-mtab="history">
+      <div id="historyList"></div>
+    </div>
+
+    <div class="mtab-section hidden" data-mtab="progress">
+      <div class="glass progress-hero" id="progressHero"></div>
+      <div class="glass chart-wrap" id="progressChart"></div>
+    </div>
+  </section>
+
+  <!-- ADMIN GATE -->
+  <section class="view-section hidden" data-view="adminGate">
+    <div class="glass gate-card">
+      <div style="font-size:28px;">🔒</div>
+      <p style="margin-top:10px;font-weight:700;">ورود به پنل مدیر</p>
+      <input type="text" id="passInput" placeholder="رمز عبور" />
+      <button class="btn sm" id="passSubmit">ورود</button>
+      <p class="err-msg hidden" id="passErr">رمز اشتباه است</p>
+      <p class="gate-note">این فقط یک قفل ساده برای دور نگه داشتن بازدیدکننده‌های معمولی است، نه یک سیستم امنیتی واقعی.</p>
+    </div>
+  </section>
+
+  <!-- ADMIN PANEL -->
+  <section class="view-section hidden" data-view="admin">
+    <h1 class="hero-title">پنل مدیر</h1>
+    <div class="subnav">
+      <button class="subnav-btn" data-atab="content">محتوا</button>
+      <button class="subnav-btn" data-atab="grades">نمرات</button>
+      <button class="subnav-btn" data-atab="submissions">تکالیف ارسالی</button>
+      <button class="subnav-btn" data-atab="settings">تنظیمات</button>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="atab-section" data-atab="content">
+      <div class="glass panel">
+        <h3>ویرایش تکلیف هفته</h3>
+        <div class="field"><label>عنوان</label><input type="text" id="adminAssignTitle"></div>
+        <div class="field"><label>توضیحات</label><textarea id="adminAssignDesc"></textarea></div>
+        <div class="field"><label>موعد تحویل (متن نمایشی)</label><input type="text" id="adminAssignDue"></div>
+        <button class="btn sm" id="saveAssignBtn">ذخیره تکلیف</button>
+        <p class="ok-msg hidden" id="assignSavedMsg">ذخیره شد ✓</p>
+      </div>
+
+      <div class="glass panel">
+        <h3 id="qFormTitle">افزودن سوال جدید</h3>
+        <div class="field-row">
+          <div class="field">
+            <label>نوع سوال</label>
+            <select id="qType">
+              <option value="mcq">چندگزینه‌ای</option>
+              <option value="blank">جای‌خالی</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>موضوع (دسته)</label>
+            <input type="text" id="qTag" list="tagList" placeholder="مثلاً واژگان">
+            <datalist id="tagList"></datalist>
+          </div>
+        </div>
+        <div class="field">
+          <label id="qTextLabel">متن سوال</label>
+          <input type="text" id="qText" class="en" placeholder="برای جای‌خالی از ____ استفاده کن">
+        </div>
+
+        <div id="mcqFields">
+          <div class="field"><label>گزینه‌ها (گزینه درست را با دکمه کنار آن مشخص کن)</label></div>
+          <div class="mcq-choice-row"><input type="radio" name="correctChoice" value="0"><input type="text" class="en mcq-choice" placeholder="گزینه ۱"></div>
+          <div class="mcq-choice-row"><input type="radio" name="correctChoice" value="1"><input type="text" class="en mcq-choice" placeholder="گزینه ۲"></div>
+          <div class="mcq-choice-row"><input type="radio" name="correctChoice" value="2"><input type="text" class="en mcq-choice" placeholder="گزینه ۳"></div>
+        </div>
+
+        <div id="blankFields" class="hidden field">
+          <label>پاسخ درست</label>
+          <input type="text" id="qBlankAnswer" class="en">
+        </div>
+
+        <div class="field">
+          <label>توضیح / دلیل پاسخ درست (اختیاری — به دانش‌آموز نشان داده می‌شود)</label>
+          <textarea id="qExplain" placeholder="مثلاً: چون despite با فعل ing+ می‌آید، نه با جمله کامل."></textarea>
+        </div>
+
+        <button class="btn sm" id="addQBtn">افزودن سوال</button>
+        <button class="btn sm ghost hidden" id="cancelEditBtn">لغو ویرایش</button>
+        <p class="err-msg hidden" id="addQErr"></p>
+      </div>
+
+      <div class="glass panel">
+        <h3>سوالات موجود (<span id="qCount"></span>)</h3>
+        <div id="qList"></div>
+      </div>
+    </div>
+
+    <!-- GRADES -->
+    <div class="atab-section hidden" data-atab="grades">
+      <div class="glass panel">
+        <h3>ثبت نتیجه دانش‌آموز</h3>
+        <p style="font-size:13.5px;color:var(--ink-soft);">کد نتیجه‌ای که دانش‌آموز برات فرستاده را اینجا بچسبان.</p>
+        <div class="field"><textarea id="importCodeInput" placeholder="کد نتیجه را اینجا بچسبان"></textarea></div>
+        <button class="btn sm" id="importCodeBtn">ثبت نتیجه</button>
+        <p class="err-msg hidden" id="importErr"></p>
+      </div>
+      <div class="glass panel">
+        <h3>نمرات دانش‌آموزان (<span id="srCount"></span>)</h3>
+        <div id="studentResultsList"></div>
+        <div style="margin-top:12px;"><button class="btn sm ghost" id="downloadCsvBtn">دانلود فهرست نمرات (CSV)</button></div>
+      </div>
+    </div>
+
+    <!-- SUBMISSIONS -->
+    <div class="atab-section hidden" data-atab="submissions">
+      <div class="glass panel">
+        <h3>ثبت تکلیف ارسالی</h3>
+        <p style="font-size:13.5px;color:var(--ink-soft);">کد تکلیفی که دانش‌آموز فرستاده را اینجا بچسبان.</p>
+        <div class="field"><textarea id="importAssignInput" placeholder="کد تکلیف را اینجا بچسبان"></textarea></div>
+        <button class="btn sm" id="importAssignBtn">ثبت تکلیف</button>
+        <p class="err-msg hidden" id="importAssignErr"></p>
+      </div>
+      <div class="glass panel">
+        <h3>تکالیف ارسال‌شده (<span id="asCount"></span>)</h3>
+        <div id="submissionsList"></div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="atab-section hidden" data-atab="settings">
+      <div class="glass panel">
+        <h3>تغییر رمز پنل مدیر</h3>
+        <div class="field"><label>رمز جدید</label><input type="text" id="newPassInput" class="en"></div>
+        <div class="field"><label>تکرار رمز جدید</label><input type="text" id="newPassInput2" class="en"></div>
+        <button class="btn sm" id="savePassBtn">ذخیره رمز جدید</button>
+        <p class="err-msg hidden" id="passSaveErr"></p>
+        <p class="ok-msg hidden" id="passSaveOk">رمز با موفقیت تغییر کرد ✓</p>
+      </div>
+
+      <div class="glass panel">
+        <h3>زمان‌بندی آزمون و تکلیف</h3>
+        <div class="field"><label>مدت زمان آزمون (دقیقه) — صفر یعنی بدون محدودیت</label><input type="number" id="examTimeInput" class="en" min="0"></div>
+        <div class="field"><label>مهلت دقیق تحویل تکلیف</label><input type="datetime-local" id="assignDeadlineInput" class="en"></div>
+        <button class="btn sm" id="saveTimingBtn">ذخیره زمان‌بندی</button>
+        <p class="ok-msg hidden" id="timingSavedMsg">ذخیره شد ✓</p>
+      </div>
+
+      <div class="glass panel">
+        <h3>افکت صوتی</h3>
+        <div class="switch-row">
+          <div class="switch-text">
+            <div class="t1">صدای حباب روی دکمه‌ها</div>
+            <div class="t2">به‌صورت پیش‌فرض غیرفعال است</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="soundToggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <button class="btn sm ghost" id="testSoundBtn">پخش نمونه صدا</button>
+      </div>
+
+      <div class="glass panel">
+        <h3>امکان آزمون دوباره برای همه</h3>
+        <p style="font-size:13.5px;color:var(--ink-soft);">با این دکمه، قفل «یک‌بار آزمون» برای همه دانش‌آموزها باز می‌شود و می‌توانند نسخه جدید آزمون را بدهند.</p>
+        <button class="btn sm ghost" id="resetVersionBtn">شروع نسخه جدید آزمون</button>
+        <p class="ok-msg hidden" id="resetVersionMsg">نسخه جدید فعال شد ✓</p>
+      </div>
+
+      <div class="glass panel">
+        <h3>انتشار تغییرات</h3>
+        <p style="font-size:13.5px;color:var(--ink-soft);">تغییراتی که در پنل مدیر می‌دهی فقط روی همین مرورگر ذخیره می‌شود. برای اینکه همه ببینند، فایل به‌روزشده را دانلود کن و جای فایل قبلی روی هاستت آپلود کن.</p>
+        <button class="btn sm" id="exportBtn">دانلود نسخه به‌روزشده سایت</button>
+        <p class="export-note">فایل دانلودی همان سایت است، فقط با محتوای جدید.</p>
+      </div>
+
+      <div class="start-card">
+        <button class="btn ghost" id="logoutBtn">خروج از پنل مدیر</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>ساخته‌شده برای تمرین زبان انگلیسی · بدون نیاز به سرور یا دیتابیس</footer>
+
+<script>
+const STORAGE_KEY = 'eng_site_data_v2';
+const HISTORY_KEY = 'eng_student_history_v1';
+const LOCK_KEY = 'eng_exam_lock_v1';
+
+const DEFAULT_DATA = /*DATA_START*/{
+  "assignment": {
+    "title": "واحد ۳ — زمان حال کامل",
+    "description": "تمرین‌های صفحه ۴۲ تا ۴۵ کتاب را انجام دهید و برای هر جمله یک مثال شخصی بنویسید.",
+    "due": "موعد تحویل: پنجشنبه"
+  },
+  "questions": [
+    {"id":1,"type":"mcq","tag":"واژگان","text":"She ___ to the radio every morning.","choices":["hears","listens","listen"],"answer":"listens","explanation":"Listen یعنی با دقت گوش دادن (فعالیت عمدی)، در حالی که hear یعنی شنیدن بدون قصد. اینجا چون عادت روزانه است، listens درست است."},
+    {"id":2,"type":"mcq","tag":"زمان و حروف اضافه","text":"I have lived in Tehran ___ 2015.","choices":["for","since","from"],"answer":"since","explanation":"Since با یک نقطه مشخص در زمان (مثل یک سال) می‌آید، اما for با طول مدت زمان به کار می‌رود."},
+    {"id":3,"type":"mcq","tag":"گرامر","text":"Despite ___ hard, he failed the exam.","choices":["study","studying","he studied"],"answer":"studying","explanation":"بعد از Despite باید اسم یا فعل ing+ بیاید، نه جمله کامل. برای جمله کامل باید Although به کار رود."},
+    {"id":4,"type":"mcq","tag":"واژگان","text":"Can you ___ me a pen? I forgot mine.","choices":["borrow","lend","give"],"answer":"lend","explanation":"Lend یعنی قرض دادن (از طرف گوینده به دیگری)، در حالی که borrow یعنی قرض گرفتن."},
+    {"id":5,"type":"mcq","tag":"واژگان","text":"He looks ___ his father.","choices":["like","alike","as"],"answer":"like","explanation":"Look like + اسم برای بیان شباهت ظاهری به کار می‌رود."},
+    {"id":6,"type":"blank","tag":"واژگان","text":"I need to ____ my homework before dinner.","answer":"do","explanation":"Do homework یک ترکیب ثابت است؛ make برای ساختن یا ایجاد کردن چیزی به کار می‌رود."},
+    {"id":7,"type":"blank","tag":"زمان‌های فعل","text":"She ____ a new car last week.","answer":"bought","explanation":"چون قید زمان last week به کار رفته، باید از گذشته ساده (bought) استفاده شود."},
+    {"id":8,"type":"blank","tag":"گرامر","text":"____ I was tired, I finished the project.","answer":"although","explanation":"چون بعدش یک جمله کامل (I was tired) آمده، باید Although به کار رود، نه Despite."},
+    {"id":9,"type":"blank","tag":"واژگان","text":"Could you ____ me your umbrella? I'll return it tomorrow.","answer":"lend","explanation":"چون گوینده می‌خواهد چیزی را از طرف مقابل بگیرد و بعداً پس بدهد، باید lend (از طرف او) درخواست شود."},
+    {"id":10,"type":"blank","tag":"زمان و حروف اضافه","text":"He has been studying English ____ three years.","answer":"for","explanation":"For با طول مدت زمان (مثل three years) می‌آید."}
+  ],
+  "studentResults": [],
+  "assignmentSubmissions": [],
+  "settings": {
+    "adminPass": "Pouria138534",
+    "examTimeLimitMin": 0,
+    "assignmentDeadline": "",
+    "soundEnabled": false,
+    "examVersion": 1
+  }
+}/*DATA_END*/;
+
+let DATA = loadData();
+DATA.studentResults = DATA.studentResults || [];
+DATA.assignmentSubmissions = DATA.assignmentSubmissions || [];
+DATA.settings = DATA.settings || {};
+DATA.settings.adminPass = DATA.settings.adminPass || 'Pouria138534';
+DATA.settings.examTimeLimitMin = DATA.settings.examTimeLimitMin || 0;
+DATA.settings.assignmentDeadline = DATA.settings.assignmentDeadline || '';
+DATA.settings.soundEnabled = !!DATA.settings.soundEnabled;
+DATA.settings.examVersion = DATA.settings.examVersion || 1;
+
+let userAnswers = {};
+let editingQuestionId = null;
+let examTimerHandle = null;
+let examTimeLeftSec = 0;
+
+function loadData(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return JSON.parse(JSON.stringify(DEFAULT_DATA));
+}
+function saveData(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA)); }
+function nextId(){ return DATA.questions.reduce((m,q)=>Math.max(m,q.id),0) + 1; }
+
+function loadHistory(){
+  try{ return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; }catch(e){ return []; }
+}
+function saveHistory(h){ localStorage.setItem(HISTORY_KEY, JSON.stringify(h)); }
+function loadLock(){
+  try{ return JSON.parse(localStorage.getItem(LOCK_KEY)); }catch(e){ return null; }
+}
+function saveLock(l){ localStorage.setItem(LOCK_KEY, JSON.stringify(l)); }
+
+/* ---------------- view switching ---------------- */
+function showView(name){
+  if(name !== 'quiz') stopExamTimer();
+  document.querySelectorAll('.view-section').forEach(s=>{
+    s.classList.toggle('hidden', s.dataset.view !== name);
+  });
+  document.querySelectorAll('.nav-btn').forEach(b=>{
+    b.classList.toggle('active', b.dataset.go === (name==='adminGate' ? 'admin' : name));
+  });
+  if(name==='home') renderHome();
+  if(name==='quiz') renderQuiz();
+  if(name==='upload') renderUpload();
+  if(name==='myprogress') renderMyProgress();
+  if(name==='admin') renderAdmin();
+}
+document.querySelectorAll('[data-go]').forEach(el=>{
+  el.addEventListener('click', ()=>{
+    const target = el.dataset.go;
+    if(target === 'admin'){
+      showView(sessionStorage.getItem('isAdmin')==='1' ? 'admin' : 'adminGate');
+    } else {
+      showView(target);
+    }
+  });
+});
+
+/* ---------------- HOME ---------------- */
+function renderHome(){
+  document.getElementById('homeAssignTitle').textContent = DATA.assignment.title;
+  document.getElementById('homeAssignDesc').textContent = DATA.assignment.description;
+  document.getElementById('homeAssignDue').textContent = DATA.assignment.due;
+  document.getElementById('quizCountText').textContent = `این آزمون ${toFa(DATA.questions.length)} سوال دارد.`;
+}
+
+/* ---------------- QUIZ ---------------- */
+function renderQuiz(){
+  stopExamTimer();
+  const lock = loadLock();
+  const locked = lock && lock.version === DATA.settings.examVersion;
+  document.getElementById('quizLockedBox').classList.toggle('hidden', !locked);
+  document.getElementById('quizOpenBox').classList.toggle('hidden', locked);
+  if(locked){
+    document.getElementById('lockedScoreText').textContent = `نمره تو: ${lock.score} از ${lock.total}`;
+    return;
+  }
+
+  userAnswers = {};
+  document.getElementById('studentNameErr').classList.add('hidden');
+  const wrap = document.getElementById('quizList');
+  wrap.innerHTML = '';
+  DATA.questions.forEach((q, i)=>{
+    const card = document.createElement('div');
+    card.className = 'glass q-card';
+    card.dataset.qid = q.id;
+    let body = '';
+    if(q.type === 'mcq'){
+      body = `<div class="choices">${q.choices.map(c=>`<button class="choice-btn" data-val="${escapeAttr(c)}">${escapeHtml(c)}</button>`).join('')}</div>`;
+    } else {
+      body = `<input type="text" class="blank-input" data-qid="${q.id}">`;
+    }
+    card.innerHTML = `
+      <div class="q-meta">
+        <span class="q-num en">Q${i+1}</span>
+        <span class="tag-pill">${escapeHtml(q.tag)}</span>
+      </div>
+      <p class="q-text">${renderQuestionText(q.text)}</p>
+      ${body}
+    `;
+    wrap.appendChild(card);
+    if(q.type === 'mcq'){
+      card.querySelectorAll('.choice-btn').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          card.querySelectorAll('.choice-btn').forEach(b=>b.classList.remove('selected'));
+          btn.classList.add('selected');
+          userAnswers[q.id] = btn.dataset.val;
+        });
+      });
+    } else {
+      const input = card.querySelector('.blank-input');
+      input.addEventListener('input', ()=>{ userAnswers[q.id] = input.value; });
+    }
+  });
+
+  const badge = document.getElementById('examTimerBadge');
+  if(DATA.settings.examTimeLimitMin > 0){
+    badge.classList.remove('hidden');
+    startExamTimer(DATA.settings.examTimeLimitMin * 60);
+  } else {
+    badge.classList.add('hidden');
+  }
+}
+function renderQuestionText(t){
+  return escapeHtml(t).replace(/(_{3,})/g, '<span class="en">$1</span>');
+}
+
+function startExamTimer(seconds){
+  examTimeLeftSec = seconds;
+  updateTimerDisplay();
+  examTimerHandle = setInterval(()=>{
+    examTimeLeftSec--;
+    updateTimerDisplay();
+    if(examTimeLeftSec <= 0){
+      stopExamTimer();
+      submitQuiz(true);
+    }
+  }, 1000);
+}
+function stopExamTimer(){
+  if(examTimerHandle){ clearInterval(examTimerHandle); examTimerHandle = null; }
+}
+function updateTimerDisplay(){
+  const m = Math.floor(examTimeLeftSec/60);
+  const s = examTimeLeftSec%60;
+  const txt = `${m}:${s<10?'0':''}${s}`;
+  document.getElementById('examTimerText').textContent = txt;
+  document.getElementById('examTimerBadge').classList.toggle('low', examTimeLeftSec <= 30);
+}
+
+document.getElementById('submitQuizBtn').addEventListener('click', ()=> submitQuiz(false));
+
+function submitQuiz(auto){
+  const nameInput = document.getElementById('studentNameInput');
+  const classInput = document.getElementById('studentClassInput');
+  const name = nameInput.value.trim();
+  const className = classInput.value.trim();
+  const nameErr = document.getElementById('studentNameErr');
+  if(!auto && (!name || !className)){
+    nameErr.classList.remove('hidden');
+    (name ? classInput : nameInput).focus();
+    return;
+  }
+  if(!auto){
+    const ok = confirm('آیا پاسخ‌هایت را بازبینی کردی؟ بعد از تأیید، امکان تغییر پاسخ‌ها وجود نخواهد داشت.');
+    if(!ok) return;
+  }
+  nameErr.classList.add('hidden');
+  stopExamTimer();
+
+  const results = DATA.questions.map(q=>{
+    const given = (userAnswers[q.id] || '').toString().trim();
+    const isCorrect = given.toLowerCase() === q.answer.toLowerCase();
+    return {id:q.id, tag:q.tag, text:q.text, type:q.type, given, answer:q.answer, isCorrect, explanation:q.explanation || ''};
+  });
+
+  document.querySelectorAll('#quizList .choice-btn').forEach(b=>b.disabled = true);
+  document.querySelectorAll('#quizList .blank-input').forEach(i=>i.disabled = true);
+
+  const correctCount = results.filter(r=>r.isCorrect).length;
+  const finalName = name || '(بدون نام)';
+  const finalClass = className || '—';
+
+  saveLock({version: DATA.settings.examVersion, score: correctCount, total: results.length, date: new Date().toLocaleString('fa-IR')});
+
+  const hist = loadHistory();
+  hist.push({type:'exam', date:new Date().toISOString(), dateLabel:new Date().toLocaleDateString('fa-IR'), score:correctCount, total:results.length});
+  saveHistory(hist);
+
+  renderResults(results, finalName, finalClass, correctCount);
+  showView('results');
+}
+
+/* ---------------- RESULTS ---------------- */
+function renderResults(results, studentName, studentClass, correctCountArg){
+  const correctCount = correctCountArg !== undefined ? correctCountArg : results.filter(r=>r.isCorrect).length;
+  document.getElementById('scoreNum').innerHTML = `<span class="en">${correctCount} / ${results.length}</span>`;
+
+  const tagStats = buildTagStats(results);
+  document.getElementById('insightText').innerHTML = buildInsightText(tagStats, correctCount, results.length);
+
+  if(studentName){
+    const record = {
+      name: studentName, className: studentClass || '',
+      date: new Date().toLocaleDateString('fa-IR'),
+      score: correctCount, total: results.length,
+      tagStats: tagStats.map(s=>({tag:s.tag, pct:s.pct})),
+      examVersion: DATA.settings.examVersion
+    };
+    document.getElementById('resultCodeBox').value = encodeCode(record);
+  }
+
+  const tagWrap = document.getElementById('tagStats');
+  tagWrap.innerHTML = tagStats.map(s=>`
+    <div class="tag-row">
+      <div class="name">${escapeHtml(s.tag)}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${s.pct}%"></div></div>
+      <div class="tag-pct en">${s.pct}%</div>
+    </div>
+  `).join('');
+
+  const reviewWrap = document.getElementById('reviewList');
+  reviewWrap.innerHTML = results.map((r,i)=>`
+    <div class="glass review-item">
+      <div class="review-top">
+        <span class="review-mark ${r.isCorrect?'ok':'bad'}">${r.isCorrect?'✓':'✗'}</span>
+        <div>
+          <p class="review-q">Q${i+1}. ${escapeHtml(r.text).replace(/(_{3,})/g,'<span class="en">$1</span>')}</p>
+          <p class="review-a">
+            پاسخ تو: <span class="${r.isCorrect?'right':'wrongtxt'}">${escapeHtml(r.given || '—')}</span>
+            ${r.isCorrect ? '' : ` &nbsp;·&nbsp; پاسخ درست: <span class="right">${escapeHtml(r.answer)}</span>`}
+          </p>
+        </div>
+      </div>
+      ${r.explanation ? `<div class="explain-box">💡 ${escapeHtml(r.explanation)}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+function buildTagStats(results){
+  const map = {};
+  results.forEach(r=>{
+    if(!map[r.tag]) map[r.tag] = {correct:0,total:0};
+    map[r.tag].total++;
+    if(r.isCorrect) map[r.tag].correct++;
+  });
+  return Object.entries(map).map(([tag,s])=>({
+    tag, correct:s.correct, total:s.total, pct: Math.round((s.correct/s.total)*100)
+  })).sort((a,b)=> b.pct - a.pct);
+}
+function buildInsightText(tagStats, correct, total){
+  if(correct === total) return '<b>عالی!</b> همه سوالات رو درست پاسخ دادی. 🎉';
+  if(tagStats.length < 2){
+    return `در این آزمون <b>${correct} از ${total}</b> سوال رو درست پاسخ دادی. تمرین بیشتر باعث پیشرفت سریع‌تر می‌شود.`;
+  }
+  const strongest = tagStats[0];
+  const weakest = tagStats[tagStats.length-1];
+  if(strongest.pct === weakest.pct){
+    return `عملکردت در تمام بخش‌ها نزدیک به هم بود (حدود <b>${strongest.pct}٪</b>). برای پیشرفت، روی همه بخش‌ها مساوی تمرین کن.`;
+  }
+  return `نقطه قوت تو بخش <b>«${escapeHtml(strongest.tag)}»</b> است (${strongest.pct}٪ درست). بیشترین نیاز به تمرین در بخش <b>«${escapeHtml(weakest.tag)}»</b> است (${weakest.pct}٪ درست) — تمرین‌های بیشتری در این زمینه انجام بده.`;
+}
+
+/* ---------------- UPLOAD ---------------- */
+function renderUpload(){
+  document.getElementById('uploadCodePanel').classList.add('hidden');
+  document.getElementById('uploadErr').classList.add('hidden');
+  const dl = DATA.settings.assignmentDeadline;
+  const infoEl = document.getElementById('deadlineInfoText');
+  const lateTag = document.getElementById('deadlineLateTag');
+  if(dl){
+    const dlDate = new Date(dl);
+    const isLate = new Date() > dlDate;
+    infoEl.textContent = 'مهلت تحویل: ' + dlDate.toLocaleString('fa-IR');
+    lateTag.classList.toggle('hidden', !isLate);
+  } else {
+    infoEl.textContent = '';
+    lateTag.classList.add('hidden');
+  }
+}
+
+document.getElementById('uploadSubmitBtn').addEventListener('click', ()=>{
+  const errEl = document.getElementById('uploadErr');
+  errEl.classList.add('hidden');
+  const name = document.getElementById('uploadNameInput').value.trim();
+  const className = document.getElementById('uploadClassInput').value.trim();
+  const note = document.getElementById('uploadNote').value.trim();
+  const fileInput = document.getElementById('uploadFileInput');
+  const file = fileInput.files[0];
+
+  if(!name || !className || !file){
+    errEl.textContent = 'لطفاً نام، کلاس و فایل تکلیف را انتخاب کن.';
+    errEl.classList.remove('hidden');
+    return;
+  }
+  if(file.size > 1.5*1024*1024){
+    errEl.textContent = 'حجم فایل زیاد است. لطفاً فایل کوچک‌تر از ۱.۵ مگابایت انتخاب کن.';
+    errEl.classList.remove('hidden');
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    const isLate = DATA.settings.assignmentDeadline ? (new Date() > new Date(DATA.settings.assignmentDeadline)) : false;
+    const record = {
+      name, className, note,
+      date: new Date().toLocaleDateString('fa-IR'),
+      fileName: file.name, fileType: file.type,
+      fileData: reader.result.split(',')[1],
+      late: isLate
+    };
+    document.getElementById('uploadCodeBox').value = encodeCode(record);
+    document.getElementById('uploadCodePanel').classList.remove('hidden');
+
+    const hist = loadHistory();
+    hist.push({type:'assignment', date:new Date().toISOString(), dateLabel:record.date, fileName:file.name, note});
+    saveHistory(hist);
+  };
+  reader.onerror = ()=>{
+    errEl.textContent = 'خطا در خواندن فایل. دوباره تلاش کن.';
+    errEl.classList.remove('hidden');
+  };
+  reader.readAsDataURL(file);
+});
+
+document.getElementById('copyUploadCodeBtn').addEventListener('click', ()=>{
+  const box = document.getElementById('uploadCodeBox');
+  box.select();
+  if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(box.value).catch(()=>{});
+  const msg = document.getElementById('copyUploadMsg');
+  msg.classList.remove('hidden');
+  setTimeout(()=> msg.classList.add('hidden'), 1800);
+});
+
+/* ---------------- MY PROGRESS ---------------- */
+document.querySelectorAll('[data-mtab]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('[data-mtab]').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.mtab-section').forEach(s=> s.classList.toggle('hidden', s.dataset.mtab !== btn.dataset.mtab));
+  });
+});
+
+function renderMyProgress(){
+  document.querySelectorAll('[data-mtab]').forEach(b=> b.classList.toggle('active', b.dataset.mtab==='history'));
+  document.querySelectorAll('.mtab-section').forEach(s=> s.classList.toggle('hidden', s.dataset.mtab!=='history'));
+
+  const hist = loadHistory().slice().sort((a,b)=> new Date(b.date) - new Date(a.date));
+  const listEl = document.getElementById('historyList');
+  if(hist.length === 0){
+    listEl.innerHTML = '<div class="glass empty-note">هنوز هیچ آزمون یا تکلیفی ثبت نکرده‌ای.</div>';
+  } else {
+    listEl.innerHTML = hist.map(h=>{
+      if(h.type === 'exam'){
+        return `<div class="glass history-item">
+          <div class="history-icon">📝</div>
+          <div><p class="history-h">آزمون — نمره ${h.score} از ${h.total}</p><p class="history-d">${escapeHtml(h.dateLabel)}</p></div>
+        </div>`;
+      }
+      return `<div class="glass history-item">
+        <div class="history-icon">📎</div>
+        <div><p class="history-h">آپلود تکلیف — ${escapeHtml(h.fileName)}</p><p class="history-d">${escapeHtml(h.dateLabel)}${h.note ? ' · ' + escapeHtml(h.note) : ''}</p></div>
+      </div>`;
+    }).join('');
+  }
+
+  renderProgressChart();
+}
+
+function renderProgressChart(){
+  const exams = loadHistory().filter(h=>h.type==='exam').sort((a,b)=> new Date(a.date) - new Date(b.date));
+  const hero = document.getElementById('progressHero');
+  const chartEl = document.getElementById('progressChart');
+
+  if(exams.length === 0){
+    hero.innerHTML = '<p style="color:var(--ink-faint);font-size:14px;">هنوز آزمونی نداده‌ای. بعد از اولین آزمون، پیشرفتت اینجا نشان داده می‌شود.</p>';
+    chartEl.innerHTML = '';
+    return;
+  }
+
+  const pcts = exams.map(e=> Math.round((e.score/e.total)*100));
+  const latest = pcts[pcts.length-1];
+  let deltaHtml = '<span class="delta-badge flat">اولین آزمون</span>';
+  if(pcts.length > 1){
+    const prev = pcts[pcts.length-2];
+    const diff = latest - prev;
+    if(diff > 0) deltaHtml = `<span class="delta-badge up">▲ ${diff}% بهتر از دفعه قبل</span>`;
+    else if(diff < 0) deltaHtml = `<span class="delta-badge down">▼ ${Math.abs(diff)}% نسبت به دفعه قبل</span>`;
+    else deltaHtml = `<span class="delta-badge flat">برابر با دفعه قبل</span>`;
+  }
+  hero.innerHTML = `<div class="latest">${latest}%</div><div class="score-label">آخرین نمره</div>${deltaHtml}`;
+
+  chartEl.innerHTML = buildChartSvg(pcts);
+}
+
+function buildChartSvg(pcts){
+  const W = 640, H = 220, padL = 36, padR = 16, padT = 24, padB = 30;
+  const innerW = W - padL - padR, innerH = H - padT - padB;
+  const n = pcts.length;
+  const pointX = i => n===1 ? padL + innerW/2 : padL + (innerW*i)/(n-1);
+  const pointY = pct => padT + innerH * (1 - pct/100);
+
+  const points = pcts.map((p,i)=>({x:pointX(i), y:pointY(p), pct:p}));
+  const linePath = points.map((p,i)=> (i===0?'M':'L') + p.x.toFixed(1) + ',' + p.y.toFixed(1)).join(' ');
+  const areaPath = linePath + ` L${points[points.length-1].x.toFixed(1)},${(padT+innerH).toFixed(1)} L${points[0].x.toFixed(1)},${(padT+innerH).toFixed(1)} Z`;
+
+  const gridLines = [0,25,50,75,100].map(v=>{
+    const y = pointY(v);
+    return `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W-padR}" y2="${y.toFixed(1)}" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+            <text x="${padL-8}" y="${(y+4).toFixed(1)}" font-size="10" fill="#8A7FA3" text-anchor="end" font-family="Space Grotesk">${v}</text>`;
+  }).join('');
+
+  const dots = points.map((p,i)=>{
+    const isLast = i === points.length-1;
+    return `<circle class="chart-dot${isLast?' last':''}" cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="5" fill="${isLast?'#C759DE':'#5E8CDE'}" stroke="#0E0A18" stroke-width="2"/>`;
+  }).join('');
+
+  return `
+  <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#C759DE" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#5E8CDE" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#C759DE"/>
+        <stop offset="100%" stop-color="#5E8CDE"/>
+      </linearGradient>
+    </defs>
+    ${gridLines}
+    <path d="${areaPath}" fill="url(#areaGrad)" stroke="none"/>
+    <path d="${linePath}" fill="none" stroke="url(#lineGrad)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    ${dots}
+  </svg>`;
+}
+
+/* ---------------- ADMIN GATE ---------------- */
+document.getElementById('passSubmit').addEventListener('click', checkPass);
+document.getElementById('passInput').addEventListener('keydown', e=>{ if(e.key==='Enter') checkPass(); });
+function checkPass(){
+  const val = document.getElementById('passInput').value;
+  if(val === DATA.settings.adminPass){
+    sessionStorage.setItem('isAdmin','1');
+    document.getElementById('passErr').classList.add('hidden');
+    showView('admin');
+  } else {
+    document.getElementById('passErr').classList.remove('hidden');
+  }
+}
+document.getElementById('logoutBtn').addEventListener('click', ()=>{
+  sessionStorage.removeItem('isAdmin');
+  showView('home');
+});
+
+/* ---------------- ADMIN: tabs ---------------- */
+document.querySelectorAll('[data-atab]').forEach(btn=>{
+  if(btn.tagName === 'BUTTON'){
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.subnav-btn[data-atab]').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.atab-section').forEach(s=> s.classList.toggle('hidden', s.dataset.atab !== btn.dataset.atab));
+    });
+  }
+});
+
+function renderAdmin(){
+  document.querySelectorAll('.subnav-btn[data-atab]').forEach(b=> b.classList.toggle('active', b.dataset.atab==='content'));
+  document.querySelectorAll('.atab-section').forEach(s=> s.classList.toggle('hidden', s.dataset.atab!=='content'));
+
+  document.getElementById('adminAssignTitle').value = DATA.assignment.title;
+  document.getElementById('adminAssignDesc').value = DATA.assignment.description;
+  document.getElementById('adminAssignDue').value = DATA.assignment.due;
+  document.getElementById('examTimeInput').value = DATA.settings.examTimeLimitMin;
+  document.getElementById('assignDeadlineInput').value = DATA.settings.assignmentDeadline;
+  document.getElementById('soundToggle').checked = DATA.settings.soundEnabled;
+
+  resetQuestionForm();
+  renderTagList();
+  renderQList();
+  renderStudentResults();
+  renderSubmissionsList();
+}
+
+document.getElementById('saveAssignBtn').addEventListener('click', ()=>{
+  DATA.assignment.title = document.getElementById('adminAssignTitle').value.trim();
+  DATA.assignment.description = document.getElementById('adminAssignDesc').value.trim();
+  DATA.assignment.due = document.getElementById('adminAssignDue').value.trim();
+  saveData();
+  flashMsg('assignSavedMsg');
+});
+
+document.getElementById('qType').addEventListener('change', e=>{
+  const isMcq = e.target.value === 'mcq';
+  document.getElementById('mcqFields').classList.toggle('hidden', !isMcq);
+  document.getElementById('blankFields').classList.toggle('hidden', isMcq);
+  document.getElementById('qTextLabel').textContent = isMcq ? 'متن سوال' : 'متن سوال (از ____ برای جای خالی استفاده کن)';
+});
+
+function renderTagList(){
+  const tags = [...new Set(DATA.questions.map(q=>q.tag))];
+  document.getElementById('tagList').innerHTML = tags.map(t=>`<option value="${escapeAttr(t)}">`).join('');
+}
+
+document.getElementById('addQBtn').addEventListener('click', ()=>{
+  const errEl = document.getElementById('addQErr');
+  errEl.classList.add('hidden');
+  const type = document.getElementById('qType').value;
+  const tag = document.getElementById('qTag').value.trim();
+  const text = document.getElementById('qText').value.trim();
+  const explanation = document.getElementById('qExplain').value.trim();
+
+  if(!tag || !text){
+    errEl.textContent = 'لطفاً موضوع و متن سوال را وارد کن.';
+    errEl.classList.remove('hidden');
+    return;
+  }
+
+  let payload;
+  if(type === 'mcq'){
+    const choiceInputs = [...document.querySelectorAll('.mcq-choice')];
+    const choices = choiceInputs.map(i=>i.value.trim());
+    const correctRadio = document.querySelector('input[name=correctChoice]:checked');
+    if(choices.some(c=>!c) || !correctRadio){
+      errEl.textContent = 'هر سه گزینه را وارد کن و گزینه درست را با دکمه کنارش انتخاب کن.';
+      errEl.classList.remove('hidden');
+      return;
+    }
+    payload = {type:'mcq', tag, text, choices, answer: choices[+correctRadio.value], explanation};
+  } else {
+    const answer = document.getElementById('qBlankAnswer').value.trim();
+    if(!answer || !text.includes('___')){
+      errEl.textContent = 'پاسخ درست را وارد کن و در متن سوال از ____ استفاده کن.';
+      errEl.classList.remove('hidden');
+      return;
+    }
+    payload = {type:'blank', tag, text, answer, explanation};
+  }
+
+  if(editingQuestionId){
+    const idx = DATA.questions.findIndex(q=>q.id===editingQuestionId);
+    if(idx > -1) DATA.questions[idx] = {...DATA.questions[idx], ...payload};
+  } else {
+    DATA.questions.push({id: nextId(), ...payload});
+  }
+  saveData();
+  resetQuestionForm();
+  renderTagList();
+  renderQList();
+});
+
+document.getElementById('cancelEditBtn').addEventListener('click', resetQuestionForm);
+
+function resetQuestionForm(){
+  editingQuestionId = null;
+  document.getElementById('qTag').value = '';
+  document.getElementById('qText').value = '';
+  document.getElementById('qExplain').value = '';
+  document.querySelectorAll('.mcq-choice').forEach(i=> i.value = '');
+  document.querySelectorAll('input[name=correctChoice]').forEach(r=> r.checked = false);
+  document.getElementById('qBlankAnswer').value = '';
+  document.getElementById('addQBtn').textContent = 'افزودن سوال';
+  document.getElementById('cancelEditBtn').classList.add('hidden');
+  document.getElementById('qFormTitle').textContent = 'افزودن سوال جدید';
+}
+
+function startEditQuestion(id){
+  const q = DATA.questions.find(x=>x.id===id);
+  if(!q) return;
+  editingQuestionId = id;
+  document.getElementById('qType').value = q.type;
+  document.getElementById('qType').dispatchEvent(new Event('change'));
+  document.getElementById('qTag').value = q.tag;
+  document.getElementById('qText').value = q.text;
+  document.getElementById('qExplain').value = q.explanation || '';
+  if(q.type === 'mcq'){
+    const choiceInputs = [...document.querySelectorAll('.mcq-choice')];
+    q.choices.forEach((c,i)=>{ if(choiceInputs[i]) choiceInputs[i].value = c; });
+    const idx = q.choices.indexOf(q.answer);
+    const radio = document.querySelector(`input[name=correctChoice][value="${idx}"]`);
+    if(radio) radio.checked = true;
+  } else {
+    document.getElementById('qBlankAnswer').value = q.answer;
+  }
+  document.getElementById('addQBtn').textContent = 'ذخیره ویرایش';
+  document.getElementById('cancelEditBtn').classList.remove('hidden');
+  document.getElementById('qFormTitle').textContent = 'ویرایش سوال';
+  document.getElementById('qFormTitle').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+function renderQList(){
+  document.getElementById('qCount').textContent = toFa(DATA.questions.length);
+  const list = document.getElementById('qList');
+  list.innerHTML = DATA.questions.map(q=>`
+    <div class="qa-list-item">
+      <div class="qa-top">
+        <span class="tag-pill">${escapeHtml(q.tag)}</span>
+        <span class="tag-pill">${q.type==='mcq'?'چندگزینه‌ای':'جای‌خالی'}</span>
+        <span class="qtxt">${escapeHtml(q.text)}</span>
+        <button class="icon-btn" data-edit="${q.id}" aria-label="ویرایش سوال">✎</button>
+        <button class="icon-btn del" data-id="${q.id}" aria-label="حذف سوال">✕</button>
+      </div>
+      ${q.explanation ? `<div class="qa-explain">💡 ${escapeHtml(q.explanation)}</div>` : ''}
+    </div>
+  `).join('');
+  list.querySelectorAll('[data-edit]').forEach(btn=>{
+    btn.addEventListener('click', ()=> startEditQuestion(+btn.dataset.edit));
+  });
+  list.querySelectorAll('[data-id]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = +btn.dataset.id;
+      DATA.questions = DATA.questions.filter(q=>q.id !== id);
+      saveData();
+      if(editingQuestionId === id) resetQuestionForm();
+      renderTagList();
+      renderQList();
+    });
+  });
+}
+
+/* ---------------- ADMIN: grades ---------------- */
+document.getElementById('importCodeBtn').addEventListener('click', ()=>{
+  const input = document.getElementById('importCodeInput');
+  const errEl = document.getElementById('importErr');
+  errEl.classList.add('hidden');
+  try{
+    const record = decodeCode(input.value);
+    if(!record.name || typeof record.score !== 'number') throw new Error('invalid');
+    record.id = Date.now();
+    DATA.studentResults.unshift(record);
+    saveData();
+    input.value = '';
+    renderStudentResults();
+  }catch(e){
+    errEl.textContent = 'این کد قابل خواندن نیست. لطفاً بررسی کن که کد کامل کپی شده باشد.';
+    errEl.classList.remove('hidden');
+  }
+});
+
+function renderStudentResults(){
+  document.getElementById('srCount').textContent = toFa(DATA.studentResults.length);
+  const wrap = document.getElementById('studentResultsList');
+  if(DATA.studentResults.length === 0){
+    wrap.innerHTML = '<p style="font-size:13.5px;color:var(--ink-faint);">هنوز هیچ نتیجه‌ای ثبت نشده.</p>';
+    return;
+  }
+  wrap.innerHTML = DATA.studentResults.map(r=>`
+    <div class="student-row">
+      <span class="sname">${escapeHtml(r.name)}</span>
+      <span class="sclass">${escapeHtml(r.className || '—')}</span>
+      <span class="grow"></span>
+      <span class="sdate">${escapeHtml(r.date)}</span>
+      <span class="sscore en">${r.score} / ${r.total}</span>
+      <button class="icon-btn del" data-id="${r.id}" aria-label="حذف نتیجه">✕</button>
+    </div>
+  `).join('');
+  wrap.querySelectorAll('.icon-btn.del').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = +btn.dataset.id;
+      DATA.studentResults = DATA.studentResults.filter(r=>r.id !== id);
+      saveData();
+      renderStudentResults();
+    });
+  });
+}
+
+document.getElementById('downloadCsvBtn').addEventListener('click', ()=>{
+  const rows = [['نام','کلاس','تاریخ','نمره','از کل']];
+  DATA.studentResults.forEach(r=> rows.push([r.name, r.className||'', r.date, r.score, r.total]));
+  const csv = rows.map(row=> row.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'student-grades.csv';
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+});
+
+/* ---------------- ADMIN: submissions ---------------- */
+document.getElementById('importAssignBtn').addEventListener('click', ()=>{
+  const input = document.getElementById('importAssignInput');
+  const errEl = document.getElementById('importAssignErr');
+  errEl.classList.add('hidden');
+  try{
+    const record = decodeCode(input.value);
+    if(!record.name || !record.fileData) throw new Error('invalid');
+    record.id = Date.now();
+    DATA.assignmentSubmissions.unshift(record);
+    saveData();
+    input.value = '';
+    renderSubmissionsList();
+  }catch(e){
+    errEl.textContent = 'این کد قابل خواندن نیست. لطفاً بررسی کن که کد کامل کپی شده باشد.';
+    errEl.classList.remove('hidden');
+  }
+});
+
+function renderSubmissionsList(){
+  document.getElementById('asCount').textContent = toFa(DATA.assignmentSubmissions.length);
+  const wrap = document.getElementById('submissionsList');
+  if(DATA.assignmentSubmissions.length === 0){
+    wrap.innerHTML = '<p style="font-size:13.5px;color:var(--ink-faint);">هنوز هیچ تکلیفی ارسال نشده.</p>';
+    return;
+  }
+  wrap.innerHTML = DATA.assignmentSubmissions.map(r=>`
+    <div class="student-row">
+      <span class="sname">${escapeHtml(r.name)}</span>
+      <span class="sclass">${escapeHtml(r.className || '—')}</span>
+      <span class="grow"></span>
+      <span class="sdate">${escapeHtml(r.date)}${r.late ? ' · <span style="color:var(--pink)">دیرکرد</span>' : ''}</span>
+      <button class="btn sm ghost" data-dl="${r.id}">دانلود فایل</button>
+      <button class="icon-btn del" data-id="${r.id}" aria-label="حذف">✕</button>
+    </div>
+  `).join('');
+  wrap.querySelectorAll('[data-dl]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const rec = DATA.assignmentSubmissions.find(r=>r.id === +btn.dataset.dl);
+      if(!rec) return;
+      const a = document.createElement('a');
+      a.href = `data:${rec.fileType || 'application/octet-stream'};base64,${rec.fileData}`;
+      a.download = rec.fileName || 'assignment-file';
+      document.body.appendChild(a); a.click(); a.remove();
+    });
+  });
+  wrap.querySelectorAll('.icon-btn.del').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = +btn.dataset.id;
+      DATA.assignmentSubmissions = DATA.assignmentSubmissions.filter(r=>r.id !== id);
+      saveData();
+      renderSubmissionsList();
+    });
+  });
+}
+
+/* ---------------- ADMIN: settings ---------------- */
+document.getElementById('savePassBtn').addEventListener('click', ()=>{
+  const p1 = document.getElementById('newPassInput').value;
+  const p2 = document.getElementById('newPassInput2').value;
+  const errEl = document.getElementById('passSaveErr');
+  errEl.classList.add('hidden');
+  if(!p1 || p1 !== p2){
+    errEl.textContent = 'رمزها یکسان نیستند یا خالی هستند.';
+    errEl.classList.remove('hidden');
+    return;
+  }
+  DATA.settings.adminPass = p1;
+  saveData();
+  document.getElementById('newPassInput').value = '';
+  document.getElementById('newPassInput2').value = '';
+  flashMsg('passSaveOk');
+});
+
+document.getElementById('saveTimingBtn').addEventListener('click', ()=>{
+  DATA.settings.examTimeLimitMin = Math.max(0, +document.getElementById('examTimeInput').value || 0);
+  DATA.settings.assignmentDeadline = document.getElementById('assignDeadlineInput').value;
+  saveData();
+  flashMsg('timingSavedMsg');
+});
+
+document.getElementById('soundToggle').addEventListener('change', e=>{
+  DATA.settings.soundEnabled = e.target.checked;
+  saveData();
+});
+document.getElementById('testSoundBtn').addEventListener('click', previewSound);
+
+document.getElementById('resetVersionBtn').addEventListener('click', ()=>{
+  if(!confirm('با این کار همه دانش‌آموزها دوباره می‌توانند آزمون بدهند. ادامه می‌دهی؟')) return;
+  DATA.settings.examVersion = (DATA.settings.examVersion || 1) + 1;
+  saveData();
+  flashMsg('resetVersionMsg');
+});
+
+document.getElementById('exportBtn').addEventListener('click', ()=>{
+  const html = document.documentElement.outerHTML;
+  const newDataStr = JSON.stringify(DATA);
+  const marker = /\/\*DATA_START\*\/[\s\S]*?\/\*DATA_END\*\//;
+  const updated = html.replace(marker, '/*DATA_START*/' + newDataStr + '/*DATA_END*/');
+  const blob = new Blob(['<!DOCTYPE html>\n' + updated], {type:'text/html'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'english-practice-updated.html';
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+});
+
+function flashMsg(id){
+  const el = document.getElementById(id);
+  el.classList.remove('hidden');
+  setTimeout(()=> el.classList.add('hidden'), 2200);
+}
+
+/* ---------------- helpers ---------------- */
+function toFa(n){
+  const map = {'0':'۰','1':'۱','2':'۲','3':'۳','4':'۴','5':'۵','6':'۶','7':'۷','8':'۸','9':'۹'};
+  return String(n).split('').map(c=> map[c] ?? c).join('');
+}
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function escapeAttr(s){ return escapeHtml(s); }
+function encodeCode(obj){ return btoa(unescape(encodeURIComponent(JSON.stringify(obj)))); }
+function decodeCode(code){ return JSON.parse(decodeURIComponent(escape(atob(code.trim())))); }
+
+document.getElementById('copyCodeBtn').addEventListener('click', ()=>{
+  const box = document.getElementById('resultCodeBox');
+  box.select();
+  if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(box.value).catch(()=>{});
+  const msg = document.getElementById('copyMsg');
+  msg.classList.remove('hidden');
+  setTimeout(()=> msg.classList.add('hidden'), 1800);
+});
+
+/* ---------------- sound effects ---------------- */
+let audioCtx = null;
+function previewSound(){
+  try{
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const t = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(880, t);
+    osc.frequency.exponentialRampToValueAtTime(280, t + 0.13);
+    gain.gain.setValueAtTime(0.0001, t);
+    gain.gain.exponentialRampToValueAtTime(0.16, t + 0.012);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.15);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start(t);
+    osc.stop(t + 0.16);
+  }catch(e){}
+}
+document.addEventListener('click', e=>{
+  if(DATA.settings.soundEnabled && e.target.closest('button')) previewSound();
+});
+
+/* ---------------- init ---------------- */
+showView('home');
+</script>
+</body>
+</html>
