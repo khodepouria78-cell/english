@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lingoo — یادگیری هوشمند انگلیسی</title>
+<!-- ایکون سایت -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌌</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -37,7 +39,7 @@ a{color:var(--b)}:focus-visible{outline:2px solid var(--b);outline-offset:2px}
 
 .blob{position:fixed;border-radius:50%;filter:blur(40px);z-index:0;pointer-events:none;opacity:.5}.blob1{width:500px;height:500px;background:radial-gradient(circle,rgba(180,77,219,.25),transparent 70%);top:-180px;left:-150px;animation:drift1 24s ease-in-out infinite alternate}.blob2{width:400px;height:400px;background:radial-gradient(circle,rgba(77,140,238,.2),transparent 70%);bottom:-160px;right:-120px;animation:drift2 28s ease-in-out infinite alternate}.blob3{width:300px;height:300px;background:radial-gradient(circle,rgba(61,224,180,.12),transparent 70%);top:50%;right:5%;animation:drift1 22s ease-in-out infinite alternate}@keyframes drift1{from{transform:translate(0,0)}to{transform:translate(45px,35px)}}@keyframes drift2{from{transform:translate(0,0)}to{transform:translate(-35px,-45px)}}
 
-nav{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;align-items:center;justify-content:space-between;padding:10px 20px;background:rgba(6,4,12,.7);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--b1);height:56px}.brand{font-weight:800;font-size:17px;display:flex;align-items:center;gap:8px;font-family:var(--ff2);letter-spacing:-.02em;cursor:pointer}.brand span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+nav{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;align-items:center;justify-content:space-between;padding:10px 20px;background:rgba(6,4,12,.7);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--b1);height:56px}.brand{font-weight:800;font-size:17px;display:flex;align-items:center;gap:8px;font-family:var(--ff2);letter-spacing:-.02em;cursor:pointer;user-select:none}.brand span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .nav-actions{display:flex;align-items:center;gap:8px}
 .icon-btn{background:var(--glass2);border:1px solid var(--b2);color:var(--ink2);border-radius:10px;width:34px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--t);font-size:16px}.icon-btn:hover{background:var(--glass3);color:var(--ink)}
 .hamburger span{display:block;width:16px;height:1.5px;background:var(--ink);border-radius:2px;position:relative;transition:.3s}.hamburger span::before,.hamburger span::after{content:'';position:absolute;width:16px;height:1.5px;background:var(--ink);border-radius:2px;transition:.3s}.hamburger span::before{top:-5px}.hamburger span::after{top:5px}.hamburger.open span{background:transparent}.hamburger.open span::before{top:0;transform:rotate(45deg)}.hamburger.open span::after{top:0;transform:rotate(-45deg)}
@@ -83,6 +85,7 @@ footer{text-align:center;padding:30px 20px 40px;color:var(--ink3);font-size:11.5
 .qa-list-item{padding:12px 14px;border-radius:14px;background:var(--glass);border:1px solid var(--b1);margin-bottom:8px;font-size:13px}.qa-top{display:flex;align-items:center;gap:10px}.qa-top .qtxt{flex:1;color:var(--ink);font-family:var(--ff2);text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.01em}.qa-explain{margin-top:6px;font-size:11.5px;color:var(--ink2)}
 .mcq-choice-row{display:flex;gap:8px;align-items:center;margin-bottom:8px}.mcq-choice-row input[type=text]{flex:1;background:var(--glass);color:var(--ink);border:1px solid var(--b2);padding:10px 12px;border-radius:10px;font-size:13px;font-family:var(--ff2)}.mcq-choice-row input[type=radio]{accent-color:var(--b);width:16px;height:16px;cursor:pointer}
 .progress-hero{padding:28px;text-align:center;margin-bottom:18px}.progress-hero .latest{font-family:var(--ff2);font-size:36px;font-weight:700;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-.02em}.delta-badge{display:inline-block;margin-top:8px;font-family:var(--ff2);font-size:12px;padding:4px 12px;border-radius:50px;letter-spacing:-.01em}.delta-badge.up{background:rgba(61,224,180,.12);color:var(--g);border:1px solid rgba(61,224,180,.3)}.delta-badge.down{background:rgba(238,77,124,.1);color:var(--r);border:1px solid rgba(238,77,124,.25)}.delta-badge.flat{background:var(--glass2);color:var(--ink2);border:1px solid var(--b2)}.chart-wrap{padding:20px}
+.err-msg{color:var(--r);font-size:12px;margin-top:5px;}
 </style>
 </head>
 <body>
@@ -102,7 +105,7 @@ footer{text-align:center;padding:30px 20px 40px;color:var(--ink3);font-size:11.5
   <button class="nav-btn" data-go="quiz"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> آزمون</button>
   <button class="nav-btn" data-go="upload"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> تکلیف</button>
   <button class="nav-btn" data-go="myprogress"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> پیشرفت من</button>
-  <button class="nav-btn" data-go="admin"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg> پنل مدیر</button>
+  <button class="nav-btn hidden" id="adminNavBtn" data-go="admin"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg> پنل مدیر</button>
 </div>
 
 <main>
@@ -141,13 +144,13 @@ footer{text-align:center;padding:30px 20px 40px;color:var(--ink3);font-size:11.5
 <section class="view-section hidden" data-view="admin"><h1 class="hero-title">پنل مدیر</h1><div class="subnav"><button class="subnav-btn" data-atab="content">📝 محتوا</button><button class="subnav-btn" data-atab="grades">📊 نمرات</button><button class="subnav-btn" data-atab="submissions">📂 تکالیف</button><button class="subnav-btn" data-atab="settings">⚙️ تنظیمات</button></div>
   <div class="atab-section" data-atab="content">
     <div class="glass panel"><h3>ویرایش تکلیف</h3><div class="field"><label>عنوان</label><input type="text" id="adminAssignTitle"></div><div class="field"><label>توضیحات</label><textarea id="adminAssignDesc"></textarea></div><div class="field"><label>موعد</label><input type="text" id="adminAssignDue"></div><div class="field"><label>پیغام معلم (نشان داده شده در صفحه اصلی)</label><input type="text" id="adminTeacherMsg" placeholder="مثلاً: یادتون نره پنجشنبه آزمون داریم!"></div><button class="btn sm" id="saveAssignBtn">💾 ذخیره در ابر</button></div>
-    <div class="glass panel"><h3>افزودن سوال</h3><div class="field-row"><div class="field"><label>نوع</label><select id="qType"><option value="mcq">چندگزینه‌ای</option><option value="blank">جای‌خالی</option></select></div><div class="field"><label>موضوع</label><input type="text" id="qTag" list="tagList"><datalist id="tagList"></datalist></div></div><div class="field"><label>متن سوال</label><input type="text" id="qText" class="en"></div><div id="mcqFields"><div class="mcq-choice-row"><input type="radio" name="correctChoice" value="0"><input type="text" class="en mcq-choice" placeholder="گزینه ۱"></div><div class="mcq-choice-row"><input type="radio" name="correctChoice" value="1"><input type="text" class="en mcq-choice" placeholder="گزینه ۲"></div><div class="mcq-choice-row"><input type="radio" name="correctChoice" value="2"><input type="text" class="en mcq-choice" placeholder="گزینه ۳"></div></div><div id="blankFields" class="hidden field"><label>پاسخ درست</label><input type="text" id="qBlankAnswer" class="en"></div><div class="field"><label>توضیح</label><textarea id="qExplain"></textarea></div><button class="btn sm" id="addQBtn">💾 ذخیره در ابر</button><button class="btn sm ghost hidden" id="cancelEditBtn">لغو</button></div>
+    <div class="glass panel"><h3>افزودن سوال</h3><div class="field-row"><div class="field"><label>نوع</label><select id="qType"><option value="mcq">چندگزینه‌ای</option><option value="blank">جای‌خالی</option></select></div><div class="field"><label>موضوع</label><input type="text" id="qTag" list="tagList"><datalist id="tagList"></datalist></div></div><div class="field"><label>متن سوال</label><input type="text" id="qText" class="en"></div><div id="mcqFields"><div class="mcq-choice-row"><input type="radio" name="correctChoice" value="0"><input type="text" class="en mcq-choice" placeholder="گزینه ۱"></div><div class="mcq-choice-row"><input type="radio" name="correctChoice" value="1"><input type="text" class="en mcq-choice" placeholder="گزینه ۲"></div><div class="mcq-choice-row"><input type="radio" name="correctChoice" value="2"><input type="text" class="en mcq-choice" placeholder="گزینه ۳"></div></div><div id="blankFields" class="hidden field"><label>پاسخ درست</label><input type="text" id="qBlankAnswer" class="en"></div><div class="field"><label>توضیح</label><textarea id="qExplain"></textarea></div><p class="err-msg hidden" id="addQErr"></p><button class="btn sm" id="addQBtn">💾 ذخیره در ابر</button><button class="btn sm ghost hidden" id="cancelEditBtn">لغو</button></div>
     <div class="glass panel"><h3>سوالات (<span id="qCount"></span>)</h3><div id="qList"></div></div>
   </div>
   <div class="atab-section hidden" data-atab="grades"><div class="glass panel"><h3>نمرات</h3><button class="btn sm" id="refreshGradesBtn">🔄 به‌روزرسانی</button></div><div class="glass panel"><h3>دانش‌آموزان (<span id="srCount">۰</span>)</h3><div id="studentResultsList"></div><button class="btn sm ghost" id="downloadCsvBtn" style="margin-top:10px">📥 دانلود CSV</button></div></div>
   <div class="atab-section hidden" data-atab="submissions"><div class="glass panel"><h3>تکالیف</h3><button class="btn sm" id="refreshSubmissionsBtn">🔄 به‌روزرسانی</button></div><div class="glass panel"><h3>لیست (<span id="asCount">۰</span>)</h3><div id="submissionsList"></div></div></div>
   <div class="atab-section hidden" data-atab="settings">
-    <div class="glass panel"><h3>رمز</h3><div class="field"><label>رمز جدید</label><input type="text" id="newPassInput" class="en"></div><div class="field"><label>تکرار</label><input type="text" id="newPassInput2" class="en"></div><button class="btn sm" id="savePassBtn">💾 ذخیره</button></div>
+    <div class="glass panel"><h3>رمز</h3><div class="field"><label>رمز جدید</label><input type="text" id="newPassInput" class="en"></div><div class="field"><label>تکرار</label><input type="text" id="newPassInput2" class="en"></div><p class="err-msg hidden" id="passSaveErr">رمزها تطابق ندارند.</p><button class="btn sm" id="savePassBtn">💾 ذخیره</button></div>
     <div class="glass panel"><h3>زمان‌بندی</h3><div class="field"><label>مدت آزمون (دقیقه)</label><input type="number" id="examTimeInput" class="en" min="0"></div><div class="field"><label>باز شدن آزمون</label><input type="datetime-local" id="examOpenTimeInput" class="en"></div><div class="field"><label>بسته شدن آزمون</label><input type="datetime-local" id="examCloseTimeInput" class="en"></div><div class="field"><label>مهلت تکلیف</label><input type="datetime-local" id="assignDeadlineInput" class="en"></div><button class="btn sm" id="saveTimingBtn">💾 ذخیره در ابر</button></div>
     <div class="glass panel"><h3>نسخه جدید</h3><button class="btn sm ghost" id="resetVersionBtn">شروع نسخه جدید</button></div>
     <button class="btn ghost" id="logoutBtn" style="display:block;margin:0 auto">خروج</button>
@@ -159,7 +162,8 @@ firebase.initializeApp({apiKey:"AIzaSyBWAOBQRMTvP8Cs1NMGIF4nGrdl-s621Gw",authDom
 const db=firebase.firestore();
 const HK='eng_history_v2',LK='eng_lock_v2',SK='eng_settings_v2';
 
-let DATA={assignment:{title:"واحد ۳",description:"تمرین صفحه ۴۲ تا ۴۵",due:"پنجشنبه"},questions:[],settings:{adminPass:'Pouria138534',examTimeLimitMin:0,assignmentDeadline:'',examVersion:1,examOpenTime:'',examCloseTime:'',teacherMsg:''}};
+// رمز ادمین به صورت کدگذاری شده Base64
+let DATA={assignment:{title:"واحد ۳",description:"تمرین صفحه ۴۲ تا ۴۵",due:"پنجشنبه"},questions:[],settings:{adminPass:btoa('Pouria138534'),examTimeLimitMin:0,assignmentDeadline:'',examVersion:1,examOpenTime:'',examCloseTime:'',teacherMsg:''}};
 let userAnswers={},editingQuestionId=null,examTimerHandle=null,examTimeLeftSec=0,quizActive=false,quizEndTime=0;
 
 const quotes=[{en:"The only way to do great work is to love what you do.",fa:"تنها راه انجام کار بزرگ، عشق به کاری است که انجام می‌دهی."},{en:"Don't watch the clock; do what it does. Keep going.",fa:"به ساعت نگاه نکن؛ کاری که ساعت می‌کند را انجام بده. ادامه بده."},{en:"Believe you can and you're halfway there.",fa:"باور داشته باش که می‌توانی، نصف راه را آمده‌ای."},{en:"The future belongs to those who believe in their dreams.",fa:"آینده متعلق به کسانی است که به رویاهایشان باور دارند."},{en:"It does not matter how slowly you go as long as you do not stop.",fa:"مهم نیست چقدر آهسته می‌روی، تا زمانی که توقف نکنی."}];
@@ -183,6 +187,9 @@ async function initData(){
   renderHome();renderTagList();renderQList();
   const sa=sessionStorage.getItem('quizActive'),se=sessionStorage.getItem('quizEndTime');
   if(sa==='1'&&se){quizActive=true;quizEndTime=+se;if(quizEndTime>Date.now()){showView('quiz');}else{quizActive=false;quizEndTime=0;sessionStorage.removeItem('quizActive');sessionStorage.removeItem('quizEndTime');showView('home');}}else{showView('home');}
+  
+  // نمایش دکمه ادمین اگر قبلا لاگین کرده باشد
+  if(sessionStorage.getItem('isAdmin')==='1'){document.getElementById('adminNavBtn').classList.remove('hidden');}
 }
 
 async function saveToCloud(){try{await db.collection("config").doc("main").set({assignment:DATA.assignment,questions:DATA.questions,settings:DATA.settings},{merge:true});localStorage.setItem(SK,JSON.stringify(DATA));return true;}catch(e){return false;}}
@@ -199,9 +206,27 @@ function showView(name){
   if(name==='home')renderHome();if(name==='quiz')renderQuiz();if(name==='upload')renderUpload();if(name==='myprogress')renderMyProgress();if(name==='admin')renderAdmin();
 }
 
+// منطق ۵ کلیک روی لوگو برای ظاهر شدن پنل ادمین
+let logoClicks = 0;
+let logoClickTimer;
+document.querySelector('.brand').addEventListener('click', (e) => {
+  if (quizActive) return;
+  
+  logoClicks++;
+  clearTimeout(logoClickTimer);
+  logoClickTimer = setTimeout(() => { logoClicks = 0; }, 2000); // ریست شمارنده پس از ۲ ثانیه
+
+  if (logoClicks === 5) {
+    document.getElementById('adminNavBtn').classList.remove('hidden');
+    showView('adminGate');
+    logoClicks = 0;
+  } else {
+    showView('home');
+  }
+});
+
 document.querySelectorAll('.sidebar .nav-btn').forEach(el=>{el.addEventListener('click',()=>{const t=el.dataset.go;if(quizActive&&t!=='quiz'&&t!=='results'&&t!=='home')return;showView(t==='admin'?(sessionStorage.getItem('isAdmin')==='1'?'admin':'adminGate'):t);document.getElementById('sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('show');document.getElementById('hamburgerBtn').classList.remove('open');});});
 document.querySelectorAll('[data-go]').forEach(el=>{if(!el.closest('.sidebar')){el.addEventListener('click',()=>{const t=el.dataset.go;showView(t==='admin'?(sessionStorage.getItem('isAdmin')==='1'?'admin':'adminGate'):t);});}});
-document.querySelector('.brand').addEventListener('click',()=>{if(quizActive)return;showView('home');});
 document.getElementById('hamburgerBtn').addEventListener('click',()=>{document.getElementById('sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('show');document.getElementById('hamburgerBtn').classList.toggle('open');});
 document.getElementById('overlay').addEventListener('click',()=>{document.getElementById('sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('show');document.getElementById('hamburgerBtn').classList.remove('open');});
 
@@ -262,7 +287,16 @@ document.querySelectorAll('[data-mtab]').forEach(btn=>{btn.addEventListener('cli
 function renderMyProgress(){document.querySelectorAll('[data-mtab]').forEach(b=>b.classList.toggle('active',b.dataset.mtab==='history'));document.querySelectorAll('.mtab-section').forEach(s=>s.classList.toggle('hidden',s.dataset.mtab!=='history'));const hist=loadHistory().slice().sort((a,b)=>new Date(b.date)-new Date(a.date));document.getElementById('historyList').innerHTML=hist.length===0?'<div class="glass panel" style="text-align:center;color:var(--ink3)">خالی</div>':hist.map(h=>h.type==='exam'?`<div class="glass review-item"><div>📝 آزمون — ${h.score}/${h.total} (${escapeHtml(h.dateLabel)})</div></div>`:`<div class="glass review-item"><div>📎 ${escapeHtml(h.fileName)} (${escapeHtml(h.dateLabel)})</div></div>`).join('');renderProgressChart();}
 function renderProgressChart(){const exams=loadHistory().filter(h=>h.type==='exam').sort((a,b)=>new Date(a.date)-new Date(b.date));const hero=document.getElementById('progressHero'),chart=document.getElementById('progressChart');if(exams.length===0){hero.innerHTML='<p style="color:var(--ink3);text-align:center">بدون آزمون</p>';chart.innerHTML='';return;}const pcts=exams.map(e=>Math.round((e.score/e.total)*100)),latest=pcts[pcts.length-1];let delta='<span class="delta-badge flat">اولین</span>';if(pcts.length>1){const d=latest-pcts[pcts.length-2];delta=d>0?`<span class="delta-badge up">▲${d}%</span>`:d<0?`<span class="delta-badge down">▼${Math.abs(d)}%</span>`:`<span class="delta-badge flat">=</span>`;}hero.innerHTML=`<div class="latest">${latest}%</div><div style="color:var(--ink2);font-size:13px;margin-top:4px">آخرین نمره</div>${delta}`;const W=640,H=200,pl=36,pr=16,pt=24,pb=30,iw=W-pl-pr,ih=H-pt-pb;const px=i=>exams.length===1?pl+iw/2:pl+(iw*i)/(exams.length-1),py=p=>pt+ih*(1-p/100);const pts=pcts.map((p,i)=>({x:px(i),y:py(p)}));const line=pts.map((p,i)=>(i===0?'M':'L')+p.x.toFixed(1)+','+p.y.toFixed(1)).join(' ');const area=line+` L${pts[pts.length-1].x},${pt+ih} L${pts[0].x},${pt+ih} Z`;const grid=[0,25,50,75,100].map(v=>{const y=py(v);return`<line x1="${pl}" y1="${y.toFixed(1)}" x2="${W-pr}" y2="${y.toFixed(1)}" stroke="var(--b1)" stroke-width="1"/><text x="${pl-8}" y="${(y+4).toFixed(1)}" font-size="10" fill="var(--ink3)" text-anchor="end" font-family="var(--ff2)">${v}%</text>`;}).join('');const dots=pts.map((p,i)=>{const last=i===pts.length-1;return`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${last?6:4}" fill="${last?'var(--p)':'var(--b)'}" stroke="var(--bg)" stroke-width="2"/>`;}).join('');chart.innerHTML=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;"><defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--p)" stop-opacity="0.3"/><stop offset="100%" stop-color="var(--b)" stop-opacity="0"/></linearGradient><linearGradient id="lg" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="var(--p)"/><stop offset="100%" stop-color="var(--b)"/></linearGradient></defs>${grid}<path d="${area}" fill="url(#ag)"/><path d="${line}" fill="none" stroke="url(#lg)" stroke-width="2.5" stroke-linecap="round"/>${dots}</svg>`;}
 
-document.getElementById('passSubmit').addEventListener('click',()=>{if(document.getElementById('passInput').value===DATA.settings.adminPass){sessionStorage.setItem('isAdmin','1');showView('admin');}else{document.getElementById('passErr').classList.remove('hidden');}});
+// منطق بررسی پسورد با Base64
+document.getElementById('passSubmit').addEventListener('click',()=>{
+  const enteredPass = document.getElementById('passInput').value;
+  if(enteredPass && btoa(enteredPass) === DATA.settings.adminPass){
+    sessionStorage.setItem('isAdmin','1');
+    showView('admin');
+  } else {
+    document.getElementById('passErr').classList.remove('hidden');
+  }
+});
 document.getElementById('logoutBtn').addEventListener('click',()=>{sessionStorage.removeItem('isAdmin');showView('home');});
 document.querySelectorAll('[data-atab]').forEach(btn=>{if(btn.tagName==='BUTTON'){btn.addEventListener('click',()=>{document.querySelectorAll('.subnav-btn[data-atab]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.atab-section').forEach(s=>s.classList.toggle('hidden',s.dataset.atab!==btn.dataset.atab));});}});
 
@@ -274,10 +308,19 @@ function renderAdmin(){
   document.getElementById('examTimeInput').value=DATA.settings.examTimeLimitMin||0;document.getElementById('examOpenTimeInput').value=DATA.settings.examOpenTime||'';document.getElementById('examCloseTimeInput').value=DATA.settings.examCloseTime||'';document.getElementById('assignDeadlineInput').value=DATA.settings.assignmentDeadline||'';
   resetQuestionForm();renderTagList();renderQList();loadFirebaseGrades();loadSubmissions();
 }
-document.getElementById('saveAssignBtn').addEventListener('click',async()=>{DATA.assignment.title=document.getElementById('adminAssignTitle').value.trim();DATA.assignment.description=document.getElementById('adminAssignDesc').value.trim();DATA.assignment.due=document.getElementById('adminAssignDue').value.trim();DATA.settings.teacherMsg=document.getElementById('adminTeacherMsg').value.trim();if(await saveToCloud())flashMsg('assignSavedMsg');});
+document.getElementById('saveAssignBtn').addEventListener('click',async()=>{DATA.assignment.title=document.getElementById('adminAssignTitle').value.trim();DATA.assignment.description=document.getElementById('adminAssignDesc').value.trim();DATA.assignment.due=document.getElementById('adminAssignDue').value.trim();DATA.settings.teacherMsg=document.getElementById('adminTeacherMsg').value.trim();if(await saveToCloud()) alert('✅ در ابر ذخیره شد!');});
 document.getElementById('qType').addEventListener('change',e=>{document.getElementById('mcqFields').classList.toggle('hidden',e.target.value!=='mcq');document.getElementById('blankFields').classList.toggle('hidden',e.target.value==='mcq');});
 function renderTagList(){document.getElementById('tagList').innerHTML=[...new Set(DATA.questions.map(q=>q.tag))].map(t=>`<option value="${escapeAttr(t)}">`).join('');}
-document.getElementById('addQBtn').addEventListener('click',async()=>{const err=document.getElementById('addQErr');err.classList.add('hidden');const type=document.getElementById('qType').value,tag=document.getElementById('qTag').value.trim(),text=document.getElementById('qText').value.trim(),expl=document.getElementById('qExplain').value.trim();if(!tag||!text){err.textContent='موضوع و متن را وارد کن.';return;}let p;if(type==='mcq'){const choices=[...document.querySelectorAll('.mcq-choice')].map(i=>i.value.trim());const radio=document.querySelector('input[name=correctChoice]:checked');if(choices.some(c=>!c)||!radio){err.textContent='گزینه‌ها را کامل کن.';return;}p={type:'mcq',tag,text,choices,answer:choices[+radio.value],explanation:expl};}else{const ans=document.getElementById('qBlankAnswer').value.trim();if(!ans||!text.includes('___')){err.textContent='پاسخ و ____ را وارد کن.';return;}p={type:'blank',tag,text,answer:ans,explanation:expl};}if(editingQuestionId){const idx=DATA.questions.findIndex(q=>q.id===editingQuestionId);if(idx>-1)DATA.questions[idx]={...DATA.questions[idx],...p};}else{DATA.questions.push({id:Date.now(),...p});}if(await saveToCloud()){resetQuestionForm();renderTagList();renderQList();}});
+document.getElementById('addQBtn').addEventListener('click',async()=>{
+  const type=document.getElementById('qType').value,tag=document.getElementById('qTag').value.trim(),text=document.getElementById('qText').value.trim(),expl=document.getElementById('qExplain').value.trim();
+  if(!tag||!text){alert('موضوع و متن را وارد کن.');return;}
+  let p;
+  if(type==='mcq'){const choices=[...document.querySelectorAll('.mcq-choice')].map(i=>i.value.trim());const radio=document.querySelector('input[name=correctChoice]:checked');if(choices.some(c=>!c)||!radio){alert('گزینه‌ها را کامل کن و گزینه درست را انتخاب کن.');return;}p={type:'mcq',tag,text,choices,answer:choices[+radio.value],explanation:expl};}
+  else{const ans=document.getElementById('qBlankAnswer').value.trim();if(!ans||!text.includes('___')){alert('پاسخ و ____ را وارد کن.');return;}p={type:'blank',tag,text,answer:ans,explanation:expl};}
+  if(editingQuestionId){const idx=DATA.questions.findIndex(q=>q.id===editingQuestionId);if(idx>-1)DATA.questions[idx]={...DATA.questions[idx],...p};}
+  else{DATA.questions.push({id:Date.now(),...p});}
+  if(await saveToCloud()){resetQuestionForm();renderTagList();renderQList();alert('✅ سوال ذخیره شد!');}
+});
 document.getElementById('cancelEditBtn').addEventListener('click',resetQuestionForm);
 function resetQuestionForm(){editingQuestionId=null;document.getElementById('qTag').value='';document.getElementById('qText').value='';document.getElementById('qExplain').value='';document.querySelectorAll('.mcq-choice').forEach(i=>i.value='');document.querySelectorAll('input[name=correctChoice]').forEach(r=>r.checked=false);document.getElementById('qBlankAnswer').value='';document.getElementById('addQBtn').textContent='💾 ذخیره در ابر';document.getElementById('cancelEditBtn').classList.add('hidden');}
 function startEditQuestion(id){const q=DATA.questions.find(x=>x.id===id);if(!q)return;editingQuestionId=id;document.getElementById('qType').value=q.type;document.getElementById('qType').dispatchEvent(new Event('change'));document.getElementById('qTag').value=q.tag;document.getElementById('qText').value=q.text;document.getElementById('qExplain').value=q.explanation||'';if(q.type==='mcq'){const ci=[...document.querySelectorAll('.mcq-choice')];q.choices.forEach((c,i)=>{if(ci[i])ci[i].value=c;});const r=document.querySelector(`input[name=correctChoice][value="${q.choices.indexOf(q.answer)}"]`);if(r)r.checked=true;}else{document.getElementById('qBlankAnswer').value=q.answer;}document.getElementById('addQBtn').textContent='💾 ذخیره ویرایش';document.getElementById('cancelEditBtn').classList.remove('hidden');}
@@ -289,16 +332,46 @@ function loadFirebaseGrades(){const wrap=document.getElementById('studentResults
 document.getElementById('refreshSubmissionsBtn')?.addEventListener('click',loadSubmissions);
 function loadSubmissions(){const wrap=document.getElementById('submissionsList');wrap.innerHTML='<p style="color:var(--ink3);">در حال بارگذاری...</p>';db.collection("submissions").get().then(snap=>{const results=[];snap.forEach(d=>results.push({id:d.id,...d.data()}));results.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));document.getElementById('asCount').textContent=toFa(results.length);if(results.length===0){wrap.innerHTML='<p style="color:var(--ink3);">خالی</p>';return;}wrap.innerHTML=results.map(r=>`<div class="student-row"><span class="sname">${escapeHtml(r.name)}</span><span style="font-size:11px">${escapeHtml(r.fileName)}</span><button class="btn sm ghost" data-dl="${r.id}">📥</button><button class="icon-btn del" data-sid="${r.id}">✕</button></div>`).join('');wrap.querySelectorAll('[data-dl]').forEach(b=>b.addEventListener('click',()=>{const rec=results.find(r=>r.id===b.dataset.dl);if(rec){const a=document.createElement('a');a.href=`data:${rec.fileType||'application/octet-stream'};base64,${rec.fileData}`;a.download=rec.fileName;a.click();}}));wrap.querySelectorAll('[data-sid]').forEach(b=>b.addEventListener('click',()=>{db.collection("submissions").doc(b.dataset.sid).delete().then(()=>{alert('🗑️ تکلیف حذف شد');loadSubmissions();});}));}).catch(()=>{wrap.innerHTML='<p style="color:var(--r);">خطا</p>';});}
 
-document.getElementById('savePassBtn').addEventListener('click',async()=>{const p1=document.getElementById('newPassInput').value,p2=document.getElementById('newPassInput2').value;if(!p1||p1!==p2){document.getElementById('passSaveErr').classList.remove('hidden');return;}DATA.settings.adminPass=p1;if(await saveToCloud()){document.getElementById('newPassInput').value='';document.getElementById('newPassInput2').value='';flashMsg('passSaveOk');}});
-document.getElementById('saveTimingBtn').addEventListener('click',async()=>{DATA.settings.examTimeLimitMin=Math.max(0,+document.getElementById('examTimeInput').value||0);DATA.settings.examOpenTime=document.getElementById('examOpenTimeInput').value;DATA.settings.examCloseTime=document.getElementById('examCloseTimeInput').value;DATA.settings.assignmentDeadline=document.getElementById('assignDeadlineInput').value;if(await saveToCloud())flashMsg('timingSavedMsg');});
-document.getElementById('resetVersionBtn').addEventListener('click',async()=>{if(!confirm('ادامه؟'))return;DATA.settings.examVersion=(DATA.settings.examVersion||1)+1;if(await saveToCloud())flashMsg('resetVersionMsg');});
-document.getElementById('downloadCsvBtn').addEventListener('click',()=>{const rows=[['نام','کلاس','تاریخ','نمره']];document.querySelectorAll('#studentResultsList .student-row').forEach(r=>{const c=r.querySelectorAll('.sname,.sscore');const d=r.querySelector('span');if(c.length>=2)rows.push([c[0].textContent,'—',d?d.textContent:'—',c[1].textContent]);});const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv'}));a.download='grades.csv';a.click();});
+document.getElementById('savePassBtn').addEventListener('click',async()=>{
+  const p1=document.getElementById('newPassInput').value,p2=document.getElementById('newPassInput2').value;
+  if(!p1||p1!==p2){
+    document.getElementById('passSaveErr').classList.remove('hidden');
+    return;
+  }
+  DATA.settings.adminPass=btoa(p1); // رمز جدید به صورت کدگذاری شده ذخیره می‌شود
+  if(await saveToCloud()){
+    document.getElementById('newPassInput').value='';
+    document.getElementById('newPassInput2').value='';
+    document.getElementById('passSaveErr').classList.add('hidden');
+    alert('✅ رمز جدید در ابر ذخیره شد!');
+  }
+});
+document.getElementById('saveTimingBtn').addEventListener('click',async()=>{DATA.settings.examTimeLimitMin=Math.max(0,+document.getElementById('examTimeInput').value||0);DATA.settings.examOpenTime=document.getElementById('examOpenTimeInput').value;DATA.settings.examCloseTime=document.getElementById('examCloseTimeInput').value;DATA.settings.assignmentDeadline=document.getElementById('assignDeadlineInput').value;if(await saveToCloud()) alert('✅ زمان‌بندی در ابر ذخیره شد!');});
+document.getElementById('resetVersionBtn').addEventListener('click',async()=>{if(!confirm('ادامه؟'))return;DATA.settings.examVersion=(DATA.settings.examVersion||1)+1;if(await saveToCloud()) alert('✅ نسخه جدید شروع شد!');});
+
+// باگ استخراج CSV حل شده
+document.getElementById('downloadCsvBtn').addEventListener('click',()=>{
+  const rows=[['نام','کلاس','تاریخ','نمره']];
+  document.querySelectorAll('#studentResultsList .student-row').forEach(r=>{
+    const spans = r.querySelectorAll('span');
+    if(spans.length >= 3){
+      const name = spans[0].textContent;
+      const score = spans[1].textContent;
+      const date = spans[2].textContent;
+      rows.push([name, '—', date, score]);
+    }
+  });
+  const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv'}));
+  a.download='grades.csv';
+  a.click();
+});
 
 history.pushState(null,null,location.href);
 window.addEventListener('popstate',()=>{history.pushState(null,null,location.href);if(quizActive)alert('⚠️ نمیتوانید آزمون را ترک کنید!');});
 window.addEventListener('beforeunload',e=>{if(quizActive){e.preventDefault();e.returnValue='';}});
 
-function flashMsg(id){const el=document.getElementById(id);el.classList.remove('hidden');setTimeout(()=>el.classList.add('hidden'),2200);}
 function toFa(n){const m={'0':'۰','1':'۱','2':'۲','3':'۳','4':'۴','5':'۵','6':'۶','7':'۷','8':'۸','9':'۹'};return String(n).split('').map(c=>m[c]??c).join('');}
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function escapeAttr(s){return escapeHtml(s);}
